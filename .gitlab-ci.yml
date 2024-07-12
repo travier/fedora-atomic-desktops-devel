@@ -11,11 +11,7 @@ stages:
   - build
 
 # As those are not official images, we build all available variants
-build:
-  stage: build
-  script:
-    - just compose-image $VARIANT
-    - just upload-container $VARIANT
+.parallel:
   parallel:
     matrix:
     - VARIANT:
@@ -28,3 +24,22 @@ build:
       - budgie-atomic
       - base-atomic
       - cosmic-atomic
+
+# Only build the images for merge requests
+buildmr:
+  stage: build
+  script:
+    - just compose-image $VARIANT
+  parallel: !reference [.parallel, parallel]
+  rules:
+  - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+# Build and upload the images for commits pushed to the branch & scheduled pipelines
+build:
+  stage: build
+  script:
+    - just compose-image $VARIANT
+    - just upload-container $VARIANT
+  parallel: !reference [.parallel, parallel]
+  rules:
+  - if: $CI_COMMIT_BRANCH == "main" && ($CI_PIPELINE_SOURCE == "push" || $CI_PIPELINE_SOURCE == "schedule")
