@@ -25,6 +25,9 @@ for root, dirs, files, rootfd in os.fwalk('.'):
     for d in ['.git', 'repo', 'cache', 'tmp', 'logs', 'fedora-comps']:
         if d in dirs:
             dirs.remove(d)
+    for f in ['.gitlab-ci.yml']:
+        if f in files:
+            files.remove(f)
     for name in files:
         if name.endswith(('.yaml', '.yml')):
             print("Validating:", name)
