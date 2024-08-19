@@ -188,7 +188,7 @@ Make a PR similar to
 ```
 sed -i "s/42/43/g" *.repo comps-sync.py
 sed -i "s/releasever: 42/releasever: 43/" common.yaml
-sed -i "s/# - fedora-42/# - fedora-43/" *.yaml
+sed -i --follow-symlinks "s/# - fedora-42/# - fedora-43/" *.yaml
 mv fedora-42.repo fedora-43.repo
 mv fedora-42-updates.repo fedora-43-updates.repo
 sed -i "s/43/44/g" README.md
@@ -199,9 +199,9 @@ sed -i "s/42/43/g" README.md
 
 ```
 rm fedora-rawhide.repo
-sed -i "/- fedora-rawhide/d" fedora-*.yaml
-sed -i "s/# - fedora-42/- fedora-42/" *.yaml
-sed -i "s/ref: fedora\/rawhide/ref: fedora\/42/" *.yaml
+sed -i --follow-symlinks "/- fedora-rawhide/d" *.yaml
+sed -i --follow-symlinks "s/# - fedora-42/- fedora-42/" *.yaml
+sed -i --follow-symlinks "s/ref: fedora\/rawhide/ref: fedora\/42/" *.yaml
 ```
 
 ## Historical references
