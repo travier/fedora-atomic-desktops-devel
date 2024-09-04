@@ -8,5 +8,25 @@ postprocess:
   - |
     #!/bin/bash
     set -xeuo pipefail
+
     # Transforms /usr/lib/ostree-boot into a bootupd-compatible update payload
     /usr/bin/bootupctl backend generate-update-metadata
+
+    # Trigger a bootloader update on boot
+    cat > /usr/lib/systemd/system/bootloader-update.service << 'EOF'
+    [Unit]
+    Description=Update bootloader on boot
+    Documentation=https://github.com/coreos/bootupd
+    ConditionFirmware=uefi
+
+    [Service]
+    Type=oneshot
+    ExecStart=/usr/bin/bootupctl update
+    RemainAfterExit=yes
+    MountFlags=slave
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+    chmod 644 /usr/lib/systemd/system/bootloader-update.service
+    echo "enable bootloader-update.service" > /usr/lib/systemd/system-preset/81-atomic-desktop.preset
