@@ -1,0 +1,24 @@
+variables:
+  bootable_container: true
+  variant: "cosmic-atomic"
+
+include:
+  - common.yaml
+  - cosmic-atomic-packages.yaml
+
+ref: fedora/41/${basearch}/cosmic-atomic
+rojig:
+  name: fedora-cosmic
+  summary: "Fedora COSMIC Atomic"
+  license: MIT
+
+packages:
+  # Portals for Flatpak
+  - xdg-desktop-portal-gtk
+  # Include GUI to manage updates & Flatpaks
+  - gnome-software
+
+# Kept in the leaf manifest as they are overwritten by Pungi in composes
+repos:
+  - fedora-41
+  - fedora-41-updates

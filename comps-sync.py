@@ -195,6 +195,7 @@ def main():
     variant_comps_groups = {
         "budgie-atomic": ["budgie-desktop", "budgie-desktop-apps", "base-x"],
         "cinnamon-atomic": ["cinnamon-desktop", "base-x"],
+        "cosmic-atomic": ["cosmic-desktop", "cosmic-desktop-apps", "base-graphical"],
         "deepin-atomic": ["deepin-desktop", "base-x"],
         "kinoite": ["kde-desktop", "base-graphical"],
         "kinoite-mobile": ["kde-mobile", "kde-mobile-apps", "base-graphical"],

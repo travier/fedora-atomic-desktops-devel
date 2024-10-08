@@ -1,0 +1,13 @@
+# DO NOT EDIT! This content is generated from comps-sync.py
+packages:
+  - ark
+  - cosmic-edit
+  - cosmic-files
+  - cosmic-session
+  - cosmic-term
+  - gnome-disk-utility
+  - gnome-keyring
+  - gnome-system-monitor
+  - mesa-dri-drivers
+  - mesa-vulkan-drivers
+  - plymouth-system-theme

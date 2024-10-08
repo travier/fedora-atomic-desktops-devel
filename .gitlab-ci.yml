@@ -27,3 +27,4 @@ build:
       - lxqt-atomic
       - budgie-atomic
       - base-atomic
+      - cosmic-atomic
