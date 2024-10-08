@@ -19,6 +19,7 @@ pretty_names := '(
     [xfce-atomic]="XFCE Atomic"
     [lxqt-atomic]="LXQt Atomic"
     [base-atomic]="Base Atomic"
+    [cosmic-atomic]="COSMIC Atomic"
 )'
 
 # Legacy names, used to keep some references stable
@@ -42,6 +43,7 @@ volume_id_substitutions := '(
     [xfce-atomic]="XfA"
     [lxqt-atomic]="LxA"
     [base-atomic]="BsA"
+    [cosmic-atomic]="CMC"
 )'
 
 # Default is to only validate the manifests
