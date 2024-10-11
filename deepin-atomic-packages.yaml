@@ -29,7 +29,6 @@ packages-x86_64:
   - chromium
   - xorg-x11-drv-intel
   - xorg-x11-drv-openchrome
-  - xorg-x11-drv-vesa
   - xorg-x11-drv-vmware
 packages-aarch64:
   - chromium
