@@ -133,6 +133,8 @@ exclude-packages:
   # https://github.com/fedora-silverblue/issue-tracker/issues/517
   - grubby
   - sdubby
+  # Exclude Tk. We can not exclude Tcl as it is neeeded for usb_modeswitch
+  - tk
 
 postprocess:
   - |
