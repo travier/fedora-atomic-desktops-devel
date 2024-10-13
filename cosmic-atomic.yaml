@@ -17,6 +17,8 @@ packages:
   - xdg-desktop-portal-gtk
   # Include GUI to manage updates & Flatpaks
   - gnome-software
+  # Power management. Expected to be droped for tuned-ppd
+  - power-profiles-daemon
 
 # Kept in the leaf manifest as they are overwritten by Pungi in composes
 repos:
