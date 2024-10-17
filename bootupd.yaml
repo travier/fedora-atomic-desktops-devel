@@ -17,7 +17,6 @@ postprocess:
     [Unit]
     Description=Update bootloader on boot
     Documentation=https://github.com/coreos/bootupd
-    ConditionFirmware=uefi
 
     [Service]
     Type=oneshot
