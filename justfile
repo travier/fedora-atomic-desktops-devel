@@ -397,17 +397,17 @@ upload-container variant=default_variant:
     # Copy fully versioned tag (major version, build date/id, git commit)
     skopeo copy ${SKOPEO_ARGS} \
         "oci-archive:${variant}.ociarchive" \
-        "docker://${image}:${version}.${buildid}.${git_commit}"
+        "docker://${image}:${version}.${buildid}"
 
     # Update "un-versioned" tag (only major version)
     skopeo copy ${SKOPEO_ARGS} \
-        "docker://${image}:${version}.${buildid}.${git_commit}" \
+        "docker://${image}:${version}.${buildid}" \
         "docker://${image}:${version}"
 
     if [[ "${variant}" == "kinoite-nightly" ]]; then
         # Update latest tag for kinoite-nightly only
         skopeo copy ${SKOPEO_ARGS} \
-            "docker://${image}:${version}.${buildid}.${git_commit}" \
+            "docker://${image}:${version}.${buildid}" \
             "docker://${image}:latest"
     fi
 
@@ -420,10 +420,10 @@ upload-container variant=default_variant:
         # Copy fully versioned tag (major version, build date/id, git commit)
         skopeo copy ${SKOPEO_ARGS} \
             "oci-archive:${variant}.ociarchive" \
-            "docker://${image}:${version}.${buildid}.${git_commit}"
+            "docker://${image}:${version}.${buildid}"
 
         # Update "un-versioned" tag (only major version)
         skopeo copy ${SKOPEO_ARGS} \
-            "docker://${image}:${version}.${buildid}.${git_commit}" \
+            "docker://${image}:${version}.${buildid}" \
             "docker://${image}:${version}"
     fi
