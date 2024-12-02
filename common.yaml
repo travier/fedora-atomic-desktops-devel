@@ -45,9 +45,6 @@ packages:
   - git-core
   # Explicitely add Git docs
   - git-core-doc
-  # Required for compatibility with old bootloaders until we have bootupd
-  # See https://github.com/fedora-silverblue/issue-tracker/issues/120
-  - ostree-grub2
   # Required until we've completed the move to systemd-sysusers
   # See: https://github.com/fedora-silverblue/issue-tracker/issues/362
   - nss-altfiles
