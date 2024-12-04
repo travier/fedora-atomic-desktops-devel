@@ -22,15 +22,6 @@ pretty_names := '(
     [cosmic-atomic]="COSMIC Atomic"
 )'
 
-# Legacy names, used to keep some references stable
-legacy_names := '(
-    [base-atomic]="base"
-    [budgie-atomic]="onyx"
-    [lxqt-atomic]="lazurite"
-    [sway-atomic]="sericea"
-    [xfce-atomic]="vauxite"
-)'
-
 # subset of the map from https://pagure.io/pungi-fedora/blob/main/f/general.conf
 volume_id_substitutions := '(
     [silverblue]="SB"
@@ -409,21 +400,4 @@ upload-container variant=default_variant:
         skopeo copy ${SKOPEO_ARGS} \
             "docker://${image}:${version}.${buildid}" \
             "docker://${image}:latest"
-    fi
-
-    # Copy to legacy names if needed
-    declare -A legacy_names={{legacy_names}}
-    variant_legacy=${legacy_names[$variant]-}
-    if [[ -n ${variant_legacy} ]]; then
-        image="quay.io/fedora-ostree-desktops/${variant_legacy}"
-
-        # Copy fully versioned tag (major version, build date/id, git commit)
-        skopeo copy ${SKOPEO_ARGS} \
-            "oci-archive:${variant}.ociarchive" \
-            "docker://${image}:${version}.${buildid}"
-
-        # Update "un-versioned" tag (only major version)
-        skopeo copy ${SKOPEO_ARGS} \
-            "docker://${image}:${version}.${buildid}" \
-            "docker://${image}:${version}"
     fi
