@@ -21,8 +21,13 @@ include:
 arch-include:
   x86_64:
     - initramfs-tpm-luks.yaml
+    - qemu-user-static-x86_64.yaml
   aarch64:
     - initramfs-tpm-luks.yaml
+    - qemu-user-static-non-x86_64.yaml
+  ppc64le:
+    - qemu-user-static-non-x86_64.yaml
+
 
 conditional-include:
   # Manifests included only for classic ostree variants
