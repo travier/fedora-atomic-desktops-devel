@@ -38,8 +38,7 @@ packages:
   - pipewire-pulseaudio
   - plymouth-system-theme
   - powerline
-  - qgnomeplatform-qt5
-  - redshift-gtk
+  - qadwaitadecorations-qt5
   - setroubleshoot
   - slick-greeter
   - slick-greeter-cinnamon
