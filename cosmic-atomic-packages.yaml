@@ -6,7 +6,7 @@ packages:
   - cosmic-session
   - cosmic-term
   - gnome-disk-utility
-  - gnome-keyring
+  - gnome-keyring-pam
   - gnome-system-monitor
   - mesa-dri-drivers
   - mesa-vulkan-drivers
