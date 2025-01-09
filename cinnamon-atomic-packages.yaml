@@ -13,6 +13,7 @@ packages:
   - cinnamon
   - cinnamon-control-center
   - cinnamon-screensaver
+  - ffmpegthumbnailer
   - firefox
   - firewall-config
   - glx-utils
@@ -43,7 +44,6 @@ packages:
   - slick-greeter
   - slick-greeter-cinnamon
   - system-config-printer
-  - totem-video-thumbnailer
   - wireplumber
   - xawtv
   - xdg-user-dirs-gtk
