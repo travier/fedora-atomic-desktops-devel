@@ -1,5 +1,5 @@
-# Set up composefs by default
-# See: https://fedoraproject.org/wiki/Changes/ComposefsAtomicCoreOSIoT
+# Enable composefs
+# See: https://fedoraproject.org/wiki/Changes/ComposefsAtomicDesktops
 postprocess:
   - |
     #!/usr/bin/env bash
