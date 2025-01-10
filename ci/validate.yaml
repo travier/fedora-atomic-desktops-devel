@@ -1,5 +1,11 @@
 - hosts: all
   tasks:
+    # https://pagure.io/fedora-ci/general/issue/505
+    - name: Restart systemd-resolved
+      become: true
+      command: systemctl restart systemd-resolved
+      when: zuul.branch == "rawhide" or zuul.branch == "main"
+
     - name: Upgrade all packages
       ansible.builtin.dnf:
         name: "*"
