@@ -3,6 +3,7 @@ packages:
   - ark
   - cosmic-edit
   - cosmic-files
+  - cosmic-player
   - cosmic-session
   - cosmic-term
   - gnome-disk-utility

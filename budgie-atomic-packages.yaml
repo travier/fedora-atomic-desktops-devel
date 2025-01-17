@@ -26,7 +26,6 @@ packages:
   - gnome-disk-utility
   - gnome-keyring-pam
   - gnome-settings-daemon
-  - gnome-software
   - gnome-system-monitor
   - gnome-terminal
   - gvfs-afc
@@ -44,6 +43,7 @@ packages:
   - nemo-fileroller
   - nemo-seahorse
   - network-manager-applet
+  - plasma-discover
   - plymouth-system-theme
   - polkit
   - seahorse

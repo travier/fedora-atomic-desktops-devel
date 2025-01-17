@@ -65,11 +65,11 @@ packages:
   - plasma-vault
   - plasma-welcome
   - plasma-workspace
-  - plasma-workspace-geolocation
   - plasma-workspace-wallpapers
   - plasma-workspace-wayland
   - plymouth-system-theme
   - polkit-kde
+  - qrca
   - samba-usershares
   - sddm
   - sddm-breeze
