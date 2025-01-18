@@ -13,6 +13,9 @@ rojig:
   license: MIT
 
 packages:
+  # Generic release package for desktop variants
+  - fedora-release
+  - fedora-release-ostree-desktop
   # Portals for Flatpak
   - xdg-desktop-portal-gtk
   # Include GUI to manage updates & Flatpaks
