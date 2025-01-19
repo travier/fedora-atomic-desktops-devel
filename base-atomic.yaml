@@ -4,9 +4,9 @@ variables:
 include:
   - common.yaml
 
-ref: fedora/rawhide/${basearch}/base
+ref: fedora/rawhide/${basearch}/base-atomic
 rojig:
-  name: fedora-base
+  name: fedora-base-atomic
   summary: "Fedora Base Atomic"
   license: MIT
 
