@@ -69,7 +69,6 @@ packages:
   - plasma-workspace-wayland
   - plymouth-system-theme
   - polkit-kde
-  - qrca
   - samba-usershares
   - sddm
   - sddm-breeze
