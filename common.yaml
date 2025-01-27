@@ -89,6 +89,12 @@ packages:
   # HFS filesystem tools for Apple hardware
   # See https://github.com/projectatomic/rpm-ostree/issues/1380
   - hfsplus-tools
+  # More printer drivers. See: https://gitlab.com/fedora/ostree/sig/-/issues/63
+  - c2esp
+  - dymo-cups-drivers
+  - printer-driver-brlaser
+  - ptouch-driver
+  - splix
 
 selinux: true
 documentation: true
