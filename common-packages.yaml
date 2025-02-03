@@ -138,6 +138,7 @@ packages:
   - plymouth-system-theme
   - policycoreutils
   - policycoreutils-python-utils
+  - prefixdevname
   - procps-ng
   - psmisc
   - qemu-guest-agent
