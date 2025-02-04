@@ -26,7 +26,6 @@ packages:
   - kamera
   # Make sure that previous Anaconda dependencies are kept in the image
   # See: https://pagure.io/fedora-kde/SIG/issue/243
-  - bcache-tools
   - mobile-broadband-provider-info
   # Make sure that modem support is installed
   - NetworkManager-ppp
