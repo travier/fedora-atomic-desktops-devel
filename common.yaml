@@ -17,6 +17,8 @@ include:
   - sysroot-ro.yaml
   # Enable kernel-install support
   - kernel-install.yaml
+  # Enable composefs
+  - composefs.yaml
 
 arch-include:
   x86_64:
@@ -32,7 +34,6 @@ conditional-include:
   # Manifests included only for the Bootable Container variants
   - if: bootable_container == true
     include:
-      - composefs.yaml
       - bootc.yaml
       - dnf5.yaml
 
