@@ -16,6 +16,7 @@ packages:
   - flatpak-kcm
   - fprintd-pam
   - kaccounts-integration-qt6
+  - kaccounts-providers
   - kcharselect
   - kde-connect
   - kde-gtk-config
@@ -30,8 +31,10 @@ packages:
   - kdnssd
   - kf6-baloo-file
   - kfind
+  - khelpcenter
   - kinfocenter
   - kio-admin
+  - kio-gdrive
   - kjournald
   - kmenuedit
   - konsole
@@ -56,6 +59,7 @@ packages:
   - plasma-disks
   - plasma-drkonqi
   - plasma-nm
+  - plasma-nm-openconnect
   - plasma-nm-openvpn
   - plasma-nm-vpnc
   - plasma-pa
@@ -80,13 +84,3 @@ packages:
   - udisks2
   - vlc-plugin-gstreamer
   - xwaylandvideobridge
-packages-x86_64:
-  - kaccounts-providers
-  - khelpcenter
-  - kio-gdrive
-  - plasma-nm-openconnect
-packages-aarch64:
-  - kaccounts-providers
-  - khelpcenter
-  - kio-gdrive
-  - plasma-nm-openconnect

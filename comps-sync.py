@@ -17,7 +17,7 @@ import sys
 import yaml
 import libcomps
 
-ARCHES = ("x86_64", "aarch64", "ppc64le")
+ARCHES = ("x86_64", "aarch64")
 
 def fatal(msg):
     '''Print the error message and exit.'''

@@ -18,18 +18,11 @@ include:
   # Enable kernel-install support
   - kernel-install.yaml
 
-# systemd-pcrphase module fails on ppc64le:
-# https://gitlab.com/fedora/ostree/sig/-/issues/44
 arch-include:
   x86_64:
-    - initramfs-tpm-luks.yaml
     - qemu-user-static-x86_64.yaml
   aarch64:
-    - initramfs-tpm-luks.yaml
     - qemu-user-static-non-x86_64.yaml
-  ppc64le:
-    - qemu-user-static-non-x86_64.yaml
-
 
 conditional-include:
   # Manifests included only for classic ostree variants
@@ -121,8 +114,6 @@ packages-aarch64:
   - grub2-efi
   - efibootmgr
   - shim
-packages-ppc64le:
-  - grub2
 packages-x86_64:
   - grub2-efi-ia32
   - grub2-efi-x64

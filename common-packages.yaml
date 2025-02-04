@@ -81,6 +81,7 @@ packages:
   - hostname
   - hplip
   - hunspell
+  - hyperv-daemons
   - ibus-anthy
   - ibus-chewing
   - ibus-gtk3
@@ -120,6 +121,7 @@ packages:
   - ntfsprogs
   - nvidia-gpu-firmware
   - nxpwireless-firmware
+  - open-vm-tools-desktop
   - opensc
   - openssh-clients
   - openssh-server
@@ -192,21 +194,14 @@ packages-x86_64:
   - alsa-sof-firmware
   - amd-ucode-firmware
   - cirrus-audio-firmware
-  - hyperv-daemons
   - intel-audio-firmware
   - intel-vsc-firmware
   - libva-intel-media-driver
   - mcelog
   - microcode_ctl
-  - open-vm-tools-desktop
   - thermald
   - virtualbox-guest-additions
 packages-aarch64:
-  - hyperv-daemons
-  - open-vm-tools-desktop
   - qcom-firmware
   - qrtr
   - rmtfs
-packages-ppc64le:
-  - lsvpd
-  - powerpc-utils

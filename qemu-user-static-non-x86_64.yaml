@@ -1,4 +1,4 @@
-# Keep only x86_64 emulation for aarch64 & ppc64le
+# Keep only x86_64 emulation for aarch64
 # See: https://gitlab.com/fedora/ostree/sig/-/issues/59
 packages:
   - qemu-user-static-x86
