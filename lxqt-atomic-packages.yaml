@@ -3,6 +3,7 @@ packages:
   - breeze-cursor-theme
   - breeze-gtk
   - breeze-icon-theme
+  - falkon
   - firewall-config
   - initial-setup-gui
   - lxqt-about
@@ -34,7 +35,3 @@ packages:
   - sddm-themes
   - upower
   - xdg-user-dirs
-packages-x86_64:
-  - falkon
-packages-aarch64:
-  - falkon

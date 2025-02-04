@@ -1,5 +1,6 @@
 # DO NOT EDIT! This content is generated from comps-sync.py
 packages:
+  - chromium
   - deepin-calculator
   - deepin-calendar
   - deepin-desktop
@@ -26,9 +27,6 @@ packages:
   - xorg-x11-xauth
   - xorg-x11-xinit
 packages-x86_64:
-  - chromium
   - xorg-x11-drv-intel
   - xorg-x11-drv-openchrome
   - xorg-x11-drv-vmware
-packages-aarch64:
-  - chromium
