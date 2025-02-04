@@ -6,7 +6,7 @@ include:
   - common.yaml
   - cosmic-atomic-packages.yaml
 
-ref: fedora/rawhide/${basearch}/cosmic-atomic
+ref: fedora/42/${basearch}/cosmic-atomic
 rojig:
   name: fedora-cosmic
   summary: "Fedora COSMIC Atomic"
@@ -25,6 +25,5 @@ packages:
 
 # Kept in the leaf manifest as they are overwritten by Pungi in composes
 repos:
-  - fedora-rawhide
-  # - fedora-42
-  # - fedora-42-updates
+  - fedora-42
+  - fedora-42-updates

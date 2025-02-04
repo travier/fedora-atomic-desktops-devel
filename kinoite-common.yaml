@@ -10,7 +10,7 @@ conditional-include:
       - kinoite-mobile-packages.yaml
 
 # Default to Kinoite (Desktop). Overriden in the Kinoite Mobile manifest
-ref: fedora/rawhide/${basearch}/kinoite
+ref: fedora/42/${basearch}/kinoite
 rojig:
   name: fedora-kde
   summary: "Fedora Kinoite"

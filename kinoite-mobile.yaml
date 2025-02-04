@@ -6,7 +6,7 @@ include:
   - kinoite-common.yaml
 
 # Override the default Kinoite ref from the kinoite-common.yaml manifest
-ref: fedora/rawhide/${basearch}/kinoite-mobile
+ref: fedora/42/${basearch}/kinoite-mobile
 rojig:
   name: fedora-kde
   summary: "Fedora Kinoite Mobile"
@@ -14,6 +14,5 @@ rojig:
 
 # Kept in the leaf manifest as they are overwritten by Pungi in composes
 repos:
-  - fedora-rawhide
-  # - fedora-42
-  # - fedora-42-updates
+  - fedora-42
+  - fedora-42-updates
