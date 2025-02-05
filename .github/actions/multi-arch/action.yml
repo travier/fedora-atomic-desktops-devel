@@ -1,0 +1,92 @@
+# SPDX-FileCopyrightText: Timothée Ravier <tim@siosm.fr>
+# SPDX-License-Identifier: CC0-1.0
+
+name: "Merge containers into a multi-arch manifest"
+description: "Merge containers into a multi-arch manifest"
+inputs:
+  version:
+    description: "Version of the container image to create a manifest for"
+    required: true
+  release:
+    description: "Additional tag to push the manifest to"
+    required: true
+  registry-path:
+    description: "Path (registry + image name) to push the multi-arch manifest to"
+    required: true
+  image-x86_64:
+    description: "Full path (registry + image name + tag) to the x86_64 container image"
+    required: true
+  image-aarch64:
+    description: "Full path (registry + image name + tag) to the aarch64 container image"
+    required: true
+  registry:
+    description: "Registry where the manifest will be pushed"
+    required: true
+  username:
+    description: "Username to use to log in to the registry"
+    required: true
+  password:
+    description: "Password to use to log in to the registry"
+    required: true
+  cosign-private-key:
+    description: "Cosign private key to sign the containers with"
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Login to Container Registry"
+      uses: redhat-actions/podman-login@v1
+      if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ inputs.username }}
+        password: ${{ inputs.password }}
+        auth_file_path: /tmp/auth.json
+
+    - name: "Create multi-arch manifest and push it to container registry"
+      if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+      id: push
+      shell: bash
+      run: |
+        set -euxo pipefail
+
+        # Create manifest with full version tags
+        buildah manifest create \
+          "${REGISTRY_PATH}:${VERSION}" \
+          "${IMAGE_X86_64}" \
+          "${IMAGE_AARCH64}"
+
+        # Push fully versioned dual arch manifest tag (major version, build date/id)
+        buildah manifest push \
+          --digestfile digest \
+          "${REGISTRY_PATH}:${VERSION}" \
+          "docker://${REGISTRY_PATH}:${VERSION}"
+
+        # Update "un-versioned" tag (only major version)
+        buildah manifest push \
+          "${REGISTRY_PATH}:${VERSION}" \
+          "docker://${REGISTRY_PATH}:${RELEASE}"
+
+        {
+        echo "digest=$(< digest)"
+        } >> "$GITHUB_OUTPUT"
+      env:
+        VERSION: ${{ inputs.version }}
+        RELEASE: ${{ inputs.release }}
+        REGISTRY_PATH: ${{ inputs.registry-path }}
+        IMAGE_X86_64: ${{ inputs.image-x86_64 }}
+        IMAGE_AARCH64: ${{ inputs.image-aarch64 }}
+
+    - name: "Install cosign CLI"
+      uses: sigstore/cosign-installer@v3.10.0
+      if: ${{ inputs.cosign-private-key != '' && (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
+
+    - name: "Sign container image"
+      if: ${{ inputs.cosign-private-key != '' && (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
+      shell: bash
+      run: |
+        cosign sign -y --key env://COSIGN_PRIVATE_KEY ${IMAGE}
+      env:
+        COSIGN_EXPERIMENTAL: false
+        COSIGN_PRIVATE_KEY: ${{ inputs.cosign-private-key }}
+        IMAGE: ${{ inputs.registry-path }}:${{ inputs.version }}@${{ steps.push.outputs.digest }}
