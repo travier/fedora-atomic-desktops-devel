@@ -1,0 +1,129 @@
+# SPDX-FileCopyrightText: Timothée Ravier <tim@siosm.fr>
+# SPDX-License-Identifier: CC0-1.0
+
+name: "Build and push a Bootable Container image"
+description: "Build a Bootable Container image from rpm-ostree manifests and push it to a registry"
+inputs:
+  variant:
+    description: "Variant to build"
+    required: true
+  release:
+    description: "Fedora release version or rawhide"
+    required: true
+  registry:
+    description: "Registry to push the container image to"
+    required: true
+  username:
+    description: "Username to use to log in to the registry"
+    required: true
+  password:
+    description: "Password to use to log in to the registry"
+    required: true
+  cosign-private-key:
+    description: "Cosign private key to sign the containers with"
+outputs:
+  version:
+    description: "The version used for this build (<release>.<date>.0)"
+    value: ${{ steps.push.outputs.version }}
+  digest:
+    description: "Digest of the pushed container image"
+    value: ${{ steps.push.outputs.digest }}
+  registry-path:
+    description: "Path to the container image, without tag"
+    value: ${{ steps.push.outputs.registry-path }}
+  tag:
+    description: "Tag used to push the container image (<release>.<date>.0-<arch>)"
+    value: ${{ steps.push.outputs.tag }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Login to Container Registry"
+      uses: redhat-actions/podman-login@v1
+      if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ inputs.username }}
+        password: ${{ inputs.password }}
+        auth_file_path: /tmp/auth.json
+
+    # - name: "Get RPMs to override and setup repo"
+    #   run: |
+    #     curl -O "https://kojipkgs.fedoraproject.org//work/tasks/7068/128917068/bootupd-0.2.26-3.fc43.x86_64.rpm"
+    #     dnf install -y createrepo_c
+    #     mkdir -p overrides/rpm
+    #     mv *.rpm overrides/rpm
+    #     pushd overrides/rpm > /dev/null
+    #     createrepo .
+    #     popd > /dev/null
+    #     pwd=$(pwd)
+    #     cat > local-overrides.repo <<EOF
+    #     [local-overrides]
+    #     name=local-overrides
+    #     baseurl=file://${pwd}/overrides/rpm
+    #     gpgcheck=0
+    #     cost=500
+    #     EOF
+    #     echo "  - local-overrides" >> ${VARIANT}.yaml
+    #   env:
+    #     VARIANT: ${{ matrix.variant }}
+
+    - name: "Build Bootable Container image"
+      shell: bash
+      run: |
+        just compose-image ${VARIANT}
+      env:
+        VARIANT: ${{ inputs.variant }}
+
+    - name: "Push container image to container registry"
+      if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+      id: push
+      shell: bash
+      run: |
+        if [[ ! -f ".buildid" ]]; then
+          echo "Missing buildid"
+        fi
+        version="${RELEASE}.$(< .buildid)"
+        registry_path="${REGISTRY}/${VARIANT}"
+        tag="${version}-${ARCH}"
+        skopeo copy \
+          --authfile /tmp/auth.json \
+          --digestfile digest \
+          --retry-times 5 \
+          --dest-compress-format gzip \
+          oci-archive:${VARIANT}.ociarchive \
+          docker://${registry_path}:${tag}
+        {
+        echo "version=${version}"
+        echo "digest=$(< digest)"
+        echo "registry-path=${registry_path}"
+        echo "tag=${tag}"
+        } >> "$GITHUB_OUTPUT"
+
+      env:
+        VARIANT: ${{ inputs.variant }}
+        RELEASE: ${{ inputs.release }}
+        REGISTRY: ${{ inputs.registry }}
+
+    # - name: "Install cosign CLI"
+    #   uses: sigstore/cosign-installer@v3.10.0
+    #   if: ${{ inputs.cosign-private-key != '' && (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
+
+    - name: "Sign container image"
+      if: ${{ inputs.cosign-private-key != '' && (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
+      shell: bash
+      run: |
+        cosign sign -y --key env://COSIGN_PRIVATE_KEY ${IMAGE}
+      env:
+        COSIGN_EXPERIMENTAL: false
+        COSIGN_PRIVATE_KEY: ${{ inputs.cosign-private-key }}
+        IMAGE: ${{ steps.push.outputs.registry-path }}:${{ steps.push.outputs.tag }}@${{ steps.push.outputs.digest }}
+
+    - name: "Upload container image as artifact"
+      uses: actions/upload-artifact@v4
+      if: github.event_name == 'pull_request'
+      with:
+        name: ${{ inputs.variant }}-${{ inputs.release }}-${{ env.ARCH }}.ociarchive
+        path: ${{ inputs.variant }}.ociarchive
+        retention-days: 3
+        compression-level: 0
