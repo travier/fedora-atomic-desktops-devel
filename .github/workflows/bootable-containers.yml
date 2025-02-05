@@ -1,0 +1,111 @@
+name: "Build Fedora Atomic Desktops Bootable Container images"
+
+env:
+  REGISTRY: "quay.io/travier"
+
+on:
+  push:
+    branches:
+      - f41
+  workflow_dispatch:
+
+permissions: read-all
+
+# Prevent multiple workflow runs from racing to ensure that pushes are made
+# sequentialy for the main branch. Also cancel in progress workflow runs for
+# pull requests only.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-push-image:
+    strategy:
+      fail-fast: false
+      matrix:
+        variant: ['silverblue', 'kinoite']
+
+    runs-on: ubuntu-24.04
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:41
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --volume /var/run/docker.sock:/var/run/docker.sock
+    steps:
+      - name: Reclaim disk space
+        run: |
+          dnf install -y moby-engine
+          docker image prune --all --force
+          rm -rf "/run/host/usr/local/lib/android"
+          dnf remove -y moby-engine
+
+      - name: Fixup containers/storage.conf
+        run: |
+          sed -i 's/driver = "overlay"/driver = "vfs"/' /usr/share/containers/storage.conf
+
+      - name: Fixup GitHub homedir
+        run: |
+          mkdir -p /github/home/.docker/
+
+      - name: Login to Container Registry
+        uses: redhat-actions/podman-login@v1
+        if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/f41'
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          auth_file_path: /tmp/auth.json
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # - name: Get RPMs to override and setup repo
+      #   run: |
+      #     curl -O "https://kojipkgs.fedoraproject.org//work/tasks/7068/128917068/bootupd-0.2.26-3.fc43.x86_64.rpm"
+      #     dnf install -y createrepo_c
+      #     mkdir -p overrides/rpm
+      #     mv *.rpm overrides/rpm
+      #     pushd overrides/rpm > /dev/null
+      #     createrepo .
+      #     popd > /dev/null
+      #     pwd=$(pwd)
+      #     cat > local-overrides.repo <<EOF
+      #     [local-overrides]
+      #     name=local-overrides
+      #     baseurl=file://${pwd}/overrides/rpm
+      #     gpgcheck=0
+      #     cost=500
+      #     EOF
+      #     echo "  - local-overrides" >> ${VARIANT}.yaml
+      #   env:
+      #     VARIANT: ${{ matrix.variant }}
+
+      - name: Build Bootable Container image
+        run: |
+          just compose-image ${VARIANT}
+        env:
+          VARIANT: ${{ matrix.variant }}
+
+      - name: Push container image to container registry
+        if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/f41'
+        run: |
+          buildid=""
+          if [[ -f ".buildid" ]]; then
+              buildid="$(< .buildid)"
+          else
+              buildid="$(date '+%Y%m%d.0')"
+              echo "${buildid}" > .buildid
+          fi
+          version="$(rpm-ostree compose tree --print-only --repo=repo silverblue.yaml | jq -r '."mutate-os-release"')"
+          skopeo copy \
+            --authfile /tmp/auth.json \
+            --retry-times 5 \
+            --dest-compress-format zstd \
+            oci-archive:${VARIANT}.ociarchive \
+            docker://${REGISTRY}/${VARIANT}-devel:${version}.${buildid}
+          skopeo copy \
+            --authfile /tmp/auth.json \
+            --retry-times 5 \
+            --dest-compress-format zstd \
+            oci-archive:${VARIANT}.ociarchive \
+            docker://${REGISTRY}/${VARIANT}-devel:${version}
+        env:
+          VARIANT: ${{ matrix.variant }}
