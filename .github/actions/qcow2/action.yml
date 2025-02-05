@@ -1,0 +1,91 @@
+# SPDX-FileCopyrightText: Timothée Ravier <tim@siosm.fr>
+# SPDX-License-Identifier: CC0-1.0
+
+name: "Build a QCOW2 disk image from a container image"
+description: "Build a QCOW2 disk image from a container image and push it as an OCI artifact to a registry"
+inputs:
+  registry:
+    description: "Registry to push the disk image to (as OCI artifact)"
+    required: true
+  image:
+    description: "Full path (registry + image name + tag) to container image"
+    required: true
+  variant:
+    description: "Name of the variant built"
+    required: true
+  release:
+    description: "Fedora release used in the image"
+    required: true
+  bib-config:
+    description: "Configuration file to pass to bootc-image-builder"
+    required: true
+  username:
+    description: "Username to use to log in to the registry"
+    required: true
+  password:
+    description: "Password to use to log in to the registry"
+    required: true
+  cosign-private-key:
+    description: "Cosign private key to sign the containers with"
+
+runs:
+  using: "composite"
+  steps:
+    - name: "Login to Container Registry"
+      uses: redhat-actions/podman-login@v1
+      if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+      with:
+        registry: ${{ inputs.registry }}
+        username: ${{ inputs.username }}
+        password: ${{ inputs.password }}
+        auth_file_path: /tmp/auth.json
+
+    - name: "Install oras CLI"
+      uses: oras-project/setup-oras@v1
+
+    - name: "Build QCOW2 disk image"
+      id: build-qcow2
+      uses: osbuild/bootc-image-builder-action@v0.0.2
+      with:
+        config-file: ${{ inputs.bib-config }}
+        image: ${{ inputs.image }}
+        rootfs: btrfs
+        types: |
+          qcow2
+
+    - name: "Upload disk image as OCI artifact with oras"
+      if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+      shell: bash
+      run: |
+        cd qcow2
+        oras push \
+          --annotation "quay.expires-after=4w" \
+          ${IMAGE}.qcow2 \
+          disk.qcow2:application/vnd.qcow2.image
+      working-directory: ${{ steps.build-qcow2.outputs.output-directory }}
+      env:
+        IMAGE: ${{ inputs.image }}
+
+    - name: "Install cosign CLI"
+      uses: sigstore/cosign-installer@v3.10.0
+      if: ${{ inputs.cosign-private-key != '' && (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
+
+    - name: "Sign container image"
+      if: ${{ inputs.cosign-private-key != '' && (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') }}
+      shell: bash
+      run: |
+        cosign sign -y --key env://COSIGN_PRIVATE_KEY ${IMAGE}
+      env:
+        COSIGN_EXPERIMENTAL: false
+        COSIGN_PRIVATE_KEY: ${{ inputs.cosign-private-key }}
+        IMAGE: ${{ inputs.image }}.qcow2
+
+    - name: "Upload Artifact"
+      uses: actions/upload-artifact@v4
+      if: github.event_name == 'pull_request'
+      with:
+        name: ${{ inputs.variant }}-${{ inputs.release }}-${{ env.ARCH }}.qcow2
+        path: ${{ steps.build-qcow2.outputs.qcow2-output-path }}
+        if-no-files-found: error
+        retention-days: 3
+        compression-level: 0
