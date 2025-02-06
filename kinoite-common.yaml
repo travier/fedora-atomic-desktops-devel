@@ -58,5 +58,10 @@ postprocess:
     #!/bin/bash
     set -xeuo pipefail
 
-    # Enable auto updates in Discover
-    echo -e "[Global]\nUseUnattendedUpdates=true\n" > /etc/xdg/PlasmaDiscoverUpdates
+    # Enable weekly auto updates in Discover. In the future, Flatpaks will be
+    # updated daily. See: https://bugs.kde.org/show_bug.cgi?id=454422
+    cat > /etc/xdg/PlasmaDiscoverUpdates <<EOF
+    [Global]
+    UseUnattendedUpdates=true
+    RequiredNotificationInterval=604800
+    EOF
