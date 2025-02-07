@@ -16,7 +16,6 @@ packages:
   - audit
   - b43-fwcutter
   - b43-openfwwf
-  - basesystem
   - bash
   - bash-color-prompt
   - bash-completion
@@ -72,6 +71,7 @@ packages:
   - glibc
   - glibc-all-langpacks
   - gnupg2
+  - gstreamer1-plugin-dav1d
   - gstreamer1-plugin-libav
   - gstreamer1-plugins-bad-free
   - gstreamer1-plugins-good
