@@ -50,6 +50,8 @@ exclude-packages:
   # See https://pagure.io/fedora-kde/SIG/issue/124
   - tracker
   - tracker-miners
+  - localsearch
+  - tinysparql
   # Ensure we do not include X11 support
   - plasma-x11
   - plasma-workspace-x11

@@ -21,5 +21,7 @@ exclude-packages:
   # Not needed in Budgie Desktop
   - tracker
   - tracker-miners
+  - localsearch
+  - tinysparql
   # Exclude GNOME Software's langpack plugin to avoid layering langpacks on Silverblue
   - gnome-software-fedora-langpacks
