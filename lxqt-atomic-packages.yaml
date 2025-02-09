@@ -20,6 +20,7 @@ packages:
   - lxqt-session
   - lxqt-themes
   - lxqt-themes-fedora
+  - lxqt-wayland-session-default-compositor-miriway
   - mesa-dri-drivers
   - mesa-vulkan-drivers
   - network-manager-applet
@@ -33,5 +34,6 @@ packages:
   - qterminal
   - sddm
   - sddm-themes
+  - sddm-wayland-miriway
   - upower
   - xdg-user-dirs
