@@ -1,7 +1,5 @@
 variables:
   bootable_container: true
-  variant: "kinoite"
-
 include:
   - kinoite-common.yaml
 
