@@ -1,5 +1,4 @@
 variables:
-  bootable_container: true
   variant: "cinnamon-atomic"
 
 include:
