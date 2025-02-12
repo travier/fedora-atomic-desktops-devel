@@ -1,5 +1,6 @@
 variables:
   variant: "lxqt-atomic"
+  exclude_perl: false
 
 include:
   - common.yaml

@@ -5,6 +5,8 @@ mutate-os-release: "${releasever}"
 variables:
   # Default to Bootable Containers and override in classic ostree manifests
   bootable_container: true
+  # Exclude Perl by default and override for XFCE & LXQt
+  exclude_perl: true
 
 # Default to `bash` in our container, the same as other containers we ship.
 container-cmd:
@@ -40,6 +42,9 @@ conditional-include:
     include:
       - bootc.yaml
       - dnf5.yaml
+  - if: exclude_perl == true
+    include:
+      - exclude-perl.yaml
 
 packages:
   # Ensure that we have a kernel. Kernel packages are not in any comps group
@@ -150,9 +155,6 @@ exclude-packages:
   - qemu-kvm-core
   - qemu-device-display-virtio-gpu
   - qemu-device-display-virtio-vga
-  # Ensure that we do not include any Perl package
-  - perl-interpreter
-  - perl-libs
 
 postprocess:
   - |
