@@ -1,5 +1,6 @@
 variables:
   variant: "xfce-atomic"
+  exclude_perl: false
 
 include:
   - common.yaml
