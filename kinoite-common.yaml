@@ -1,6 +1,10 @@
 include:
   - common.yaml
 
+# Default to Kinoite and override in Kinoite Mobile manifests
+variables:
+  variant: "kinoite"
+
 conditional-include:
   - if: variant == "kinoite"
     include:
