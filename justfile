@@ -34,7 +34,7 @@ volume_id_substitutions := '(
     [xfce-atomic]="XfA"
     [lxqt-atomic]="LxA"
     [base-atomic]="BsA"
-    [cosmic-atomic]="CMC"
+    [cosmic-atomic]="CSMCA"
 )'
 
 # Default is to only validate the manifests
