@@ -306,9 +306,6 @@ desktop_exclude_list:
     - NetworkManager-sstp-gnome
     - NetworkManager-strongswan-gnome
     - NetworkManager-team
-  cosmic-desktop:
-    # Pulls PackageKit in
-    - cosmic-store
   cosmic-desktop-apps:
     # Non-critical apps -> Flatpak
     - gnome-calculator
