@@ -19,9 +19,3 @@ packages:
   - xdg-desktop-portal-gtk
   # Power management. Expected to be droped for tuned-ppd
   - power-profiles-daemon
-
-# Kept in the leaf manifest as they are overwritten by Pungi in composes
-repos:
-  - fedora-rawhide
-  # - fedora-43
-  # - fedora-43-updates
