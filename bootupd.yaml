@@ -32,3 +32,20 @@ postprocess:
 
     # Turn permissive mode on for bootupd until all SELinux issues are fixed
     semanage permissive --noreload --add bootupd_t
+
+    # Ensure that BLS support is enabled when regenerating GRUB configs
+    cat > /usr/lib/systemd/system/atomic-enable-grub-bls-support.service << 'EOF'
+    [Unit]
+    Description=Force enable BLS support in GRUB config
+    Documentation=https://fedoraproject.org/wiki/Changes/ComposefsAtomicDesktops
+
+    [Service]
+    Type=oneshot
+    ExecStart=bash -c "if [[ -f '/etc/default/grub' ]] && [[ $(grep -c 'GRUB_ENABLE_BLSCFG=true' '/etc/default/grub') != 1 ]]; then sed -i '/GRUB_ENABLE_BLSCFG=/d' '/etc/default/grub'; echo 'GRUB_ENABLE_BLSCFG=true' >> '/etc/default/grub'; fi"
+    RemainAfterExit=yes
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+
+    echo "enable atomic-enable-grub-bls-support.service" > /usr/lib/systemd/system-preset/81-atomic-desktop.preset
