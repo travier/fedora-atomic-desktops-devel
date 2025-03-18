@@ -122,7 +122,6 @@ packages:
   - nvidia-gpu-firmware
   - nxpwireless-firmware
   - open-vm-tools-desktop
-  - openrgb-udev-rules
   - opensc
   - openssh-clients
   - openssh-server
@@ -166,7 +165,6 @@ packages:
   - spice-webdavd
   - sssd-common
   - sssd-kcm
-  - steam-devices
   - sudo
   - system-config-printer-udev
   - systemd
