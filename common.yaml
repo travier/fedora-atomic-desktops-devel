@@ -25,6 +25,8 @@ include:
   - kernel-install.yaml
   # Enable composefs
   - composefs.yaml
+  # Add some top level directories
+  - top-level-dirs.yaml
 
 arch-include:
   x86_64:

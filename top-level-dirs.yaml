@@ -1,0 +1,9 @@
+# Add some common top level directories that folks can not easily add anymore
+# now that we are using composefs
+
+postprocess:
+  - |
+    #!/bin/bash
+    set -xeuo pipefail
+
+    install -d -m 0755 /nix /snap
