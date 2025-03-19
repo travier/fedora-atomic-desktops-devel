@@ -5,6 +5,7 @@ packages:
   - cosmic-files
   - cosmic-player
   - cosmic-session
+  - cosmic-store
   - cosmic-term
   - flatpak
   - gnome-disk-utility
