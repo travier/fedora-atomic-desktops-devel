@@ -42,6 +42,7 @@ packages:
   - gvfs-smb
   - librsvg2
   - libsane-hpaio
+  - localsearch
   - mesa-dri-drivers
   - mesa-libEGL
   - mesa-vulkan-drivers
@@ -51,8 +52,7 @@ packages:
   - ptyxis
   - rygel
   - systemd-oomd-defaults
-  - tracker
-  - tracker-miners
+  - tinysparql
   - xdg-desktop-portal
   - xdg-desktop-portal-gnome
   - xdg-desktop-portal-gtk
