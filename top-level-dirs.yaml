@@ -6,4 +6,5 @@ postprocess:
     #!/bin/bash
     set -xeuo pipefail
 
-    install -d -m 0755 /nix /snap
+    echo "Creating /nix & /snap"
+    install --verbose -d -m 0755 /nix /snap
