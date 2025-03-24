@@ -92,6 +92,20 @@
       # Still run the next step if this one fails
       ignore_errors: true
 
+    - name: Perform dependency resolution for COSMIC Atomic
+      ansible.builtin.shell:
+        chdir: "{{ zuul.project.src_dir }}"
+        cmd: "just compose-dry-run cosmic-atomic && touch .zuulci.cosmic-atomic"
+      # Still run the next step if this one fails
+      ignore_errors: true
+
+    - name: Perform dependency resolution for COSMIC Atomic (ostree classic)
+      ansible.builtin.shell:
+        chdir: "{{ zuul.project.src_dir }}"
+        cmd: "just compose-dry-run cosmic-atomic-ostree && touch .zuulci.cosmic-atomic-ostree"
+      # Still run the next step if this one fails
+      ignore_errors: true
+
     - name: Compose the base variant
       ansible.builtin.command:
         chdir: "{{ zuul.project.src_dir }}"
@@ -100,4 +114,4 @@
     - name: Check if any previous dependency resolution steps failed
       ansible.builtin.shell:
         chdir: "{{ zuul.project.src_dir }}"
-        cmd: "[[ -f .zuulci.comps ]] &&  [[ -f .zuulci.silverblue ]] &&  [[ -f .zuulci.silverblue-ostree ]] && [[ -f .zuulci.kinoite ]] && [[ -f .zuulci.kinoite-ostree ]] && [[ -f .zuulci.sway-atomic ]] && [[ -f .zuulci.sway-atomic-ostree ]] && [[ -f .zuulci.budgie-atomic ]]  && [[ -f .zuulci.budgie-atomic-ostree ]]"
+        cmd: "[[ -f .zuulci.comps ]] &&  [[ -f .zuulci.silverblue ]] &&  [[ -f .zuulci.silverblue-ostree ]] && [[ -f .zuulci.kinoite ]] && [[ -f .zuulci.kinoite-ostree ]] && [[ -f .zuulci.sway-atomic ]] && [[ -f .zuulci.sway-atomic-ostree ]] && [[ -f .zuulci.budgie-atomic ]]  && [[ -f .zuulci.budgie-atomic-ostree ]] && [[ -f .zuulci.cosmic-atomic ]]  && [[ -f .zuulci.cosmic-atomic-ostree ]]"
