@@ -278,6 +278,8 @@ desktop_exclude_list:
     - abrt-desktop
     - abrt-java-connector
     - dnfdragora-updater
+    # Will switch to Silverblue on rebases
+    - gnome-software
     # Non-critical apps -> Flatpak & toolbox
     - eom
     - gnome-calculator
