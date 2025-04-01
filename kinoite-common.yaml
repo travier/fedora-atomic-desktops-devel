@@ -57,17 +57,3 @@ exclude-packages:
   - plasma-workspace-x11
   # Exclude mariadb server tools that bring in Perl
   - mariadb-server-utils
-
-# Kinoite specific workarounds and configuration
-postprocess:
-  - |
-    #!/bin/bash
-    set -xeuo pipefail
-
-    # Enable weekly auto updates in Discover. In the future, Flatpaks will be
-    # updated daily. See: https://bugs.kde.org/show_bug.cgi?id=454422
-    cat > /etc/xdg/PlasmaDiscoverUpdates <<EOF
-    [Global]
-    UseUnattendedUpdates=true
-    RequiredNotificationInterval=604800
-    EOF
