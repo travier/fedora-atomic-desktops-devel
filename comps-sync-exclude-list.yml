@@ -116,10 +116,8 @@ desktop_exclude_list:
     # Non-critical apps -> Flatpak
     - baobab
     - cheese
+    - decibels
     - snapshot
-    - evince
-    - evince-djvu
-    - evince-nautilus
     - file-roller
     - file-roller-nautilus
     - gnome-boxes
@@ -139,15 +137,16 @@ desktop_exclude_list:
     - gnome-weather
     - jwhois
     - loupe
+    - papers
+    - papers-nautilus
     - rdist
     - sane-backends-drivers-scanners
+    - showtime
     - simple-scan
     - sushi
     - symlinks
     - tcpdump
     - telnet
-    - totem
-    - totem-nautilus
     - traceroute
   budgie-desktop:
     # Incompatible with ostree for various reasons
