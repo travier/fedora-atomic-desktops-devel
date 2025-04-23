@@ -2,7 +2,6 @@
 packages:
   - NetworkManager-openconnect-gnome
   - NetworkManager-openvpn-gnome
-  - NetworkManager-pptp-gnome
   - NetworkManager-ssh-gnome
   - NetworkManager-vpnc-gnome
   - Thunar

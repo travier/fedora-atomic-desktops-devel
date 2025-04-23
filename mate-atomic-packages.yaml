@@ -5,7 +5,6 @@ packages:
   - NetworkManager-openconnect-gnome
   - NetworkManager-openvpn-gnome
   - NetworkManager-ppp
-  - NetworkManager-pptp-gnome
   - NetworkManager-ssh-gnome
   - NetworkManager-vpnc-gnome
   - NetworkManager-wifi

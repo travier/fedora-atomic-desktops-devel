@@ -4,7 +4,6 @@ packages:
   - NetworkManager-libreswan-gnome
   - NetworkManager-openconnect-gnome
   - NetworkManager-openvpn-gnome
-  - NetworkManager-pptp-gnome
   - NetworkManager-sstp-gnome
   - NetworkManager-vpnc-gnome
   - Thunar
