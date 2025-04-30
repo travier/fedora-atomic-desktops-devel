@@ -39,6 +39,10 @@ image: quay.io/fedora-ostree-desktops/buildroot:$release
 # We build the images for merge requests, we push and sign them for commits
 # pushed to release branches and scheduled pipelines.
 
+variables:
+  REGISTRY: "quay.io"
+  RELEASE_REPO: "fedora-ostree-desktops"
+
 stages:
   - build
   - merge
@@ -74,6 +78,10 @@ build-$variant-x86_64:
     - saas-linux-small-amd64
   rules:
     - if: \$CI_COMMIT_BRANCH == "$branch" && (\$CI_PIPELINE_SOURCE == "push" || \$CI_PIPELINE_SOURCE == "schedule")
+  artifacts:
+    paths:
+      - .buildid
+    expire_in: 1 week
 
 build-$variant-aarch64:
   stage: build
@@ -84,13 +92,20 @@ build-$variant-aarch64:
     - saas-linux-small-arm64
   rules:
     - if: \$CI_COMMIT_BRANCH == "$branch" && (\$CI_PIPELINE_SOURCE == "push" || \$CI_PIPELINE_SOURCE == "schedule")
+  artifacts:
+    paths:
+      - .buildid
+    expire_in: 1 week
 
 merge-$variant:
   stage: merge
   script:
     - just multi-arch-manifest $variant
-    - just sign $variant
-  needs: ["build-$variant-x86_64", "build-$variant-aarch64"]
+  needs:
+    - job: "build-$variant-x86_64"
+      artifacts: true
+    - job: "build-$variant-aarch64"
+      artifacts: true
   tags:
     - saas-linux-small-amd64
   rules:
