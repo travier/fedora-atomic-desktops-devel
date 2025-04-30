@@ -229,14 +229,6 @@ clean-repo:
 clean-cache:
     rm -rf ./cache
 
-# Run from inside a container
-podman:
-    podman run --rm -ti --volume $PWD:/srv:rw --workdir /srv --privileged quay.io/fedora-ostree-desktops/buildroot
-
-# Update the container image
-podman-pull:
-    podman pull quay.io/fedora-ostree-desktops/buildroot
-
 # Build an ISO
 lorax variant=default_variant:
     #!/bin/bash
