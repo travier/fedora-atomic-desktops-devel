@@ -324,7 +324,7 @@ lorax variant=default_variant:
         --add-template-var=ostree_update_ref=fedora/${version}/x86_64/${variant} \
         ${pwd}/iso/linux
 
-# Upload the containers to a registry (Quay.io)
+# Upload a container to a registry and sign it. Used in CI
 upload-container variant=default_variant arch=default_arch:
     #!/bin/bash
     set -euxo pipefail
@@ -339,13 +339,25 @@ upload-container variant=default_variant arch=default_arch:
         exit 1
     fi
 
-    if [[ -z ${CI_REGISTRY_USER+x} ]] || [[ -z ${CI_REGISTRY_PASSWORD+x} ]]; then
-        echo "Skipping container upload: Not in CI"
-        exit 0
-    fi
     if [[ "${CI}" != "true" ]]; then
-        echo "Skipping container upload: Not in CI"
-        exit 0
+        echo "Skipping: Not in CI"
+        exit 1
+    fi
+    if [[ -z ${REGISTRY+x} ]] || [[ -z ${RELEASE_REPO+x} ]]; then
+        echo "Skipping: No REGISTRY or RELEASE_REPO set"
+        exit 1
+    fi
+    if [[ -z ${CI_REGISTRY_USER+x} ]] || [[ -z ${CI_REGISTRY_PASSWORD+x} ]]; then
+        echo "Skipping: No CI_REGISTRY_USER or CI_REGISTRY_PASSWORD set"
+        exit 1
+    fi
+
+    buildid=""
+    if [[ -f ".buildid" ]]; then
+        buildid="$(< .buildid)"
+    else
+        echo "Skipping: No '.buildid' file"
+        exit 1
     fi
 
     version=""
@@ -355,18 +367,14 @@ upload-container variant=default_variant arch=default_arch:
         version="$(rpm-ostree compose tree --print-only --repo=repo ${variant}.yaml | jq -r '."mutate-os-release"')"
     fi
 
-    buildid=""
-    if [[ -f ".buildid" ]]; then
-        buildid="$(< .buildid)"
-    else
-        buildid="$(date '+%Y%m%d.0')"
-        echo "${buildid}" > .buildid
-    fi
-
     # Login to the registry
-    skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" quay.io
+    skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" "${REGISTRY}"
 
-    image="quay.io/fedora-ostree-desktops/${variant}"
+    # Login to the registry again for cosign
+    skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" \
+        --authfile="${HOME}/.docker/config.json" "${REGISTRY}"
+
+    image="${REGISTRY}/${RELEASE_REPO}/${variant}"
 
     # Only append arch suffix if requested
     suffix=""
@@ -377,24 +385,22 @@ upload-container variant=default_variant arch=default_arch:
     # Support for the zstd:chunked format is not ready yet
     SKOPEO_ARGS="--retry-times 3 --dest-compress-format gzip"
 
-    # Push fully versioned tag (major version, build date/id)
+    # Push fully versioned tag (major version, build date/id, arch)
     skopeo copy ${SKOPEO_ARGS} \
         "oci-archive:${variant}.ociarchive" \
         "docker://${image}:${version}.${buildid}${suffix}"
 
-    # Update "un-versioned" tag (only major version)
-    skopeo copy ${SKOPEO_ARGS} \
-        "docker://${image}:${version}.${buildid}${suffix}" \
-        "docker://${image}:${version}${suffix}"
+    # Decode private key
+    printenv "COSIGN_PRIVATE_KEY" > private.key.b64
+    base64 --decode private.key.b64 > private.key
 
-    if [[ "${variant}" == "kinoite-nightly" ]]; then
-        # Update latest tag for kinoite-nightly only
-        skopeo copy ${SKOPEO_ARGS} \
-            "docker://${image}:${version}.${buildid}" \
-            "docker://${image}:latest${suffix}"
-    fi
+    # Sign images recursively
+    cosign sign -y --key private.key ${image}:${version}.${buildid}${suffix}
 
-# Create a multi-arch manifest for a given variant and push it to a registry
+    # Cleanup private key
+    rm private.key.b64 private.key
+
+# Create a multi-arch manifest for a given variant, push it to a registry and sign it
 multi-arch-manifest variant=default_variant:
     #!/bin/bash
     set -euxo pipefail
@@ -408,58 +414,25 @@ multi-arch-manifest variant=default_variant:
         exit 1
     fi
 
-    if [[ -z ${CI_REGISTRY_USER+x} ]] || [[ -z ${CI_REGISTRY_PASSWORD+x} ]]; then
-        echo "Skipping multi-arch-manifest: Not in CI"
-        exit 0
-    fi
     if [[ "${CI}" != "true" ]]; then
-        echo "Skipping multi-arch-manifest: Not in CI"
-        exit 0
+        echo "Skipping: Not in CI"
+        exit 1
     fi
-
-    version=""
-    if [[ "$(git rev-parse --abbrev-ref HEAD)" == "main" ]] || [[ -f "fedora-rawhide.repo" ]]; then
-        version="rawhide"
-    else
-        version="$(rpm-ostree compose tree --print-only --repo=repo ${variant}.yaml | jq -r '."mutate-os-release"')"
+    if [[ -z ${REGISTRY+x} ]] || [[ -z ${RELEASE_REPO+x} ]]; then
+        echo "Skipping: No REGISTRY or RELEASE_REPO set"
+        exit 1
     fi
-
-    # Login to the registry
-    skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" quay.io
-
-    image="quay.io/fedora-ostree-desktops/${variant}"
-
-    # Create manifest
-    buildah manifest create "${image}:${version}" \
-            "${image}:${version}-x86_64" \
-            "${image}:${version}-aarch64"
-
-    # Push to registry
-    buildah manifest push \
-        "${image}:${version}" \
-        "docker://${image}:${version}"
-
-# Sign containers using cosign (sigstore)
-sign variant=default_variant:
-    #!/bin/bash
-    set -euxo pipefail
-
-    variant={{variant}}
-
-    declare -A pretty_names={{pretty_names}}
-    variant_pretty=${pretty_names[$variant]-}
-    if [[ -z $variant_pretty ]]; then
-        echo "Unknown variant"
+    if [[ -z ${CI_REGISTRY_USER+x} ]] || [[ -z ${CI_REGISTRY_PASSWORD+x} ]]; then
+        echo "Skipping: No CI_REGISTRY_USER or CI_REGISTRY_PASSWORD set"
         exit 1
     fi
 
-    if [[ -z ${CI_REGISTRY_USER+x} ]] || [[ -z ${CI_REGISTRY_PASSWORD+x} ]]; then
-        echo "Skipping artifact archiving: Not in CI"
-        exit 0
-    fi
-    if [[ "${CI}" != "true" ]]; then
-        echo "Skipping artifact archiving: Not in CI"
-        exit 0
+    buildid=""
+    if [[ -f ".buildid" ]]; then
+        buildid="$(< .buildid)"
+    else
+        echo "Skipping: No '.buildid' file"
+        exit 1
     fi
 
     version=""
@@ -470,19 +443,47 @@ sign variant=default_variant:
     fi
 
     # Login to the registry
-    skopeo login \
-        --username "${CI_REGISTRY_USER}" \
-        --password "${CI_REGISTRY_PASSWORD}" \
-        --authfile="${HOME}/.docker/config.json" \
-        quay.io
+    skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" "${REGISTRY}"
+
+    # Login to the registry again for cosign
+    skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" \
+        --authfile="${HOME}/.docker/config.json" "${REGISTRY}"
+
+    image="${REGISTRY}/${RELEASE_REPO}/${variant}"
+
+    # Create manifest with full version tags
+    buildah manifest create "${image}:${version}.${buildid}" \
+            "${image}:${version}.${buildid}-x86_64" \
+            "${image}:${version}.${buildid}-aarch64"
 
     # Decode private key
     printenv "COSIGN_PRIVATE_KEY" > private.key.b64
     base64 --decode private.key.b64 > private.key
 
-    # Sign images recursively
-    image="quay.io/fedora-ostree-desktops/${variant}"
-    cosign sign -y --key private.key --recursive=true ${image}:${version}
+    # Push fully versioned dual arch manifest tag (major version, build date/id)
+    buildah manifest push \
+        "${image}:${version}.${buildid}" \
+        "docker://${image}:${version}.${buildid}"
+
+    # Sign manifest
+    cosign sign -y --key private.key ${image}:${version}.${buildid}
+
+    # Update "un-versioned" tag (only major version)
+    buildah manifest push \
+        "${image}:${version}.${buildid}" \
+        "docker://${image}:${version}"
+
+    # Sign manifest
+    cosign sign -y --key private.key ${image}:${version}
+
+    if [[ "${variant}" == "kinoite-nightly" ]]; then
+        # Update latest tag for kinoite-nightly only
+        buildah manifest push \
+            "${image}:${version}.${buildid}" \
+            "docker://${image}:latest"
+        # Sign manifest
+        cosign sign -y --key private.key ${image}:latest
+    fi
 
     # Cleanup private key
     rm private.key.b64 private.key
