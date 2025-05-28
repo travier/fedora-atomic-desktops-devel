@@ -132,6 +132,7 @@ packages:
   - pciutils
   - pinfo
   - pipewire-alsa
+  - pipewire-config-raop
   - pipewire-gstreamer
   - pipewire-pulseaudio
   - pipewire-utils
