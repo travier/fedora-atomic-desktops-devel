@@ -40,6 +40,8 @@ packages:
   - swaylock
   - system-config-printer
   - thunar-archive-plugin
+  - tuned-ppd
+  - tuned-switcher
   - waybar
   - wev
   - wl-clipboard
