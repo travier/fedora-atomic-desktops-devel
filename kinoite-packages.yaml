@@ -6,6 +6,7 @@ packages:
   - akonadi-server-mysql
   - ark
   - audiocd-kio
+  - aurorae
   - bluedevil
   - breeze-icon-theme
   - colord-kde
