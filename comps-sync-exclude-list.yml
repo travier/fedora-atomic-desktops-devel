@@ -235,9 +235,6 @@ desktop_exclude_list:
     - dnfdragora-updater
     # X11 is going away with Plasma 6
     - sddm-x11
-  deepin-desktop:
-    # Incompatible with ostree for various reasons
-    - dnfdragora-updater
   mate-desktop:
     # Incompatible with ostree for various reasons
     - abrt-desktop
