@@ -186,13 +186,13 @@ Make a PR similar to
 ### On Rawhide / main branch
 
 ```
-sed -i "s/44/44/g" *.repo comps-sync.py
-sed -i "s/releasever: 44/releasever: 44/" common.yaml
-sed -i --follow-symlinks "s/# - fedora-44/# - fedora-44/" *.yaml
-mv fedora-44.repo fedora-44.repo
-mv fedora-44-updates.repo fedora-44-updates.repo
-sed -i "s/44/44/g" README.md
-sed -i "s/44/44/g" README.md
+sed -i "s/44/45/g" *.repo comps-sync.py
+sed -i "s/releasever: 44/releasever: 45/" common.yaml
+sed -i --follow-symlinks "s/# - fedora-44/# - fedora-45/" *.yaml
+mv fedora-44.repo fedora-45.repo
+mv fedora-44-updates.repo fedora-45-updates.repo
+sed -i "s/45/46/g" README.md
+sed -i "s/44/45/g" README.md
 ```
 
 ### On the new branch (f44)
