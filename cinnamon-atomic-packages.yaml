@@ -36,6 +36,7 @@ packages:
   - nm-connection-editor
   - pipewire-alsa
   - pipewire-pulseaudio
+  - pluma
   - plymouth-system-theme
   - powerline
   - qadwaitadecorations-qt5

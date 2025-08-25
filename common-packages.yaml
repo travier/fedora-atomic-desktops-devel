@@ -143,6 +143,7 @@ packages:
   - prefixdevname
   - procps-ng
   - psmisc
+  - qcom-wwan-firmware
   - qemu-guest-agent
   - qt5-qtbase
   - qt5-qtbase-gui
