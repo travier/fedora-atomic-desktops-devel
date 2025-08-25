@@ -9,8 +9,6 @@ variants=(
     'kinoite'
     'kinoite-mobile'
     'sway-atomic'
-    'xfce-atomic'
-    'lxqt-atomic'
     'budgie-atomic'
     'base-atomic'
     'cosmic-atomic'
