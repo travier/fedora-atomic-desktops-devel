@@ -132,7 +132,6 @@ packages-x86_64:
   - grub2-efi-x64
   - grub2-pc
   - efibootmgr
-  - shim-ia32
   - shim-x64
 
 # Make sure the following are not pulled in when Recommended by other packages
