@@ -43,6 +43,7 @@ packages:
   - krfb
   - kscreen
   - kscreenlocker
+  - kunifiedpush
   - kwalletmanager5
   - kwin
   - kwrite
