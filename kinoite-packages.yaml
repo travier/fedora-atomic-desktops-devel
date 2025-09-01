@@ -84,3 +84,5 @@ packages:
   - udisks2
   - vlc-plugin-gstreamer
   - xwaylandvideobridge
+packages-x86_64:
+  - thermald
