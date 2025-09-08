@@ -395,7 +395,11 @@ upload-container variant=default_variant arch=default_arch:
 
     # Support for the zstd:chunked format is not ready yet
     SKOPEO_ARGS+=("--dest-compress-format")
-    SKOPEO_ARGS+=("gzip")
+    if [[ ${version} == "rawhide" ]] || [[ ${version} == "43" ]]; then
+        SKOPEO_ARGS+=("zstd")
+    else
+        SKOPEO_ARGS+=("gzip")
+    fi
 
     # Push fully versioned tag (major version, build date/id, arch)
     skopeo copy "${SKOPEO_ARGS[@]}" \
