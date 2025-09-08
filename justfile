@@ -208,6 +208,7 @@ compose-image variant=default_variant:
         "--cachedir=cache"
         "--initialize"
         "--label=quay.expires-after=4w"
+        "--max-layers=96"
     )
     if [[ {{force_nocache}} == "true" ]]; then
         ARGS+=("--force-nocache")
