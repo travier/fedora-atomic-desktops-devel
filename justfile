@@ -149,17 +149,20 @@ compose-legacy variant=default_variant:
     version="$(rpm-ostree compose tree --print-only --repo=repo ${variant}.yaml | jq -r '."mutate-os-release"')"
     echo "Composing ${variant_pretty} ${version}.${buildid} ..."
 
-    ARGS="--repo=repo --cachedir=cache"
-    ARGS+=" --unified-core"
+    ARGS=(
+        "--repo=repo"
+        "--cachedir=cache"
+        "--unified-core"
+    )
     if [[ {{force_nocache}} == "true" ]]; then
-        ARGS+=" --force-nocache"
+        ARGS+=(" --force-nocache")
     fi
     CMD="rpm-ostree"
     if [[ ${EUID} -ne 0 ]]; then
         CMD="sudo rpm-ostree"
     fi
 
-    ${CMD} compose tree ${ARGS} \
+    ${CMD} compose tree "${ARGS[@]}" \
         --add-metadata-string="version=${variant_pretty} ${version}.${buildid}" \
         "${variant}-ostree.yaml" \
             |& tee "logs/${variant}_${version}_${buildid}.${timestamp}.log"
@@ -201,9 +204,13 @@ compose-image variant=default_variant:
     version="$(rpm-ostree compose tree --print-only --repo=repo ${variant}.yaml | jq -r '."mutate-os-release"')"
     echo "Composing ${variant_pretty} ${version}.${buildid} ..."
 
-    ARGS="--cachedir=cache --initialize"
+    ARGS=(
+        "--cachedir=cache"
+        "--initialize"
+        "--label=quay.expires-after=4w"
+    )
     if [[ {{force_nocache}} == "true" ]]; then
-        ARGS+=" --force-nocache"
+        ARGS+=("--force-nocache")
     fi
     # To debug with gdb, use: gdb --args ...
     CMD="rpm-ostree"
@@ -211,8 +218,7 @@ compose-image variant=default_variant:
         CMD="sudo rpm-ostree"
     fi
 
-    ${CMD} compose image ${ARGS} \
-         --label="quay.expires-after=4w" \
+    ${CMD} compose image "${ARGS[@]}" \
         "${variant}.yaml" \
         "${variant}.ociarchive"
 
@@ -382,11 +388,16 @@ upload-container variant=default_variant arch=default_arch:
         suffix="-${arch}"
     fi
 
+    SKOPEO_ARGS=(
+        "--retry-times" "3"
+    )
+
     # Support for the zstd:chunked format is not ready yet
-    SKOPEO_ARGS="--retry-times 3 --dest-compress-format gzip"
+    SKOPEO_ARGS+=("--dest-compress-format")
+    SKOPEO_ARGS+=("gzip")
 
     # Push fully versioned tag (major version, build date/id, arch)
-    skopeo copy ${SKOPEO_ARGS} \
+    skopeo copy "${SKOPEO_ARGS[@]}" \
         "oci-archive:${variant}.ociarchive" \
         "docker://${image}:${version}.${buildid}${suffix}"
 
