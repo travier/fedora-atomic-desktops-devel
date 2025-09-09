@@ -38,6 +38,28 @@ volume_id_substitutions := '(
     [cosmic-atomic]="CSMCA"
 )'
 
+# Define a retry function for use in recipes
+retry_function := '
+retry() {
+    if [[ "${#}" -lt 3 ]]; then
+        echo "retry usage: <number of tries> <time between retries> <command> ..."
+        return 1
+    fi
+    tries="${1}"
+    sleep="${2}"
+    shift 2
+    for i in $(seq 1 ${tries}); do
+        if [[ ${i} -gt 1 ]]; then
+            # echo "[+] Command failed. Waiting for ${sleep} seconds"
+            sleep ${sleep}
+        fi
+        # echo "[+] Running (try: ${i}): ${@}"
+        "${@}" && r=0 && break || r=$?
+    done
+    return $r
+}
+'
+
 # Default is to only validate the manifests
 all: validate
 
@@ -336,6 +358,8 @@ upload-container variant=default_variant arch=default_arch:
     #!/bin/bash
     set -euxo pipefail
 
+    {{retry_function}}
+
     variant={{variant}}
     arch={{arch}}
 
@@ -375,10 +399,10 @@ upload-container variant=default_variant arch=default_arch:
     fi
 
     # Login to the registry
-    skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" "${REGISTRY}"
+    retry 5 60 skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" "${REGISTRY}"
 
     # Login to the registry again for cosign
-    skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" \
+    retry 5 60 skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" \
         --authfile="${HOME}/.docker/config.json" "${REGISTRY}"
 
     image="${REGISTRY}/${RELEASE_REPO}/${variant}"
@@ -398,7 +422,7 @@ upload-container variant=default_variant arch=default_arch:
     SKOPEO_ARGS+=("gzip")
 
     # Push fully versioned tag (major version, build date/id, arch)
-    skopeo copy "${SKOPEO_ARGS[@]}" \
+    retry 5 60 skopeo copy "${SKOPEO_ARGS[@]}" \
         "oci-archive:${variant}.ociarchive" \
         "docker://${image}:${version}.${buildid}${suffix}"
 
@@ -407,7 +431,7 @@ upload-container variant=default_variant arch=default_arch:
     base64 --decode private.key.b64 > private.key
 
     # Sign images recursively
-    cosign sign -y --key private.key ${image}:${version}.${buildid}${suffix}
+    retry 5 60 cosign sign -y --key private.key ${image}:${version}.${buildid}${suffix}
 
     # Cleanup private key
     rm private.key.b64 private.key
@@ -416,6 +440,8 @@ upload-container variant=default_variant arch=default_arch:
 multi-arch-manifest variant=default_variant:
     #!/bin/bash
     set -euxo pipefail
+
+    {{retry_function}}
 
     variant={{variant}}
 
@@ -455,10 +481,10 @@ multi-arch-manifest variant=default_variant:
     fi
 
     # Login to the registry
-    skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" "${REGISTRY}"
+    retry 5 60 skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" "${REGISTRY}"
 
     # Login to the registry again for cosign
-    skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" \
+    retry 5 60 skopeo login --username "${CI_REGISTRY_USER}" --password "${CI_REGISTRY_PASSWORD}" \
         --authfile="${HOME}/.docker/config.json" "${REGISTRY}"
 
     image="${REGISTRY}/${RELEASE_REPO}/${variant}"
@@ -473,20 +499,20 @@ multi-arch-manifest variant=default_variant:
     base64 --decode private.key.b64 > private.key
 
     # Push fully versioned dual arch manifest tag (major version, build date/id)
-    buildah manifest push \
+    retry 5 60 buildah manifest push \
         "${image}:${version}.${buildid}" \
         "docker://${image}:${version}.${buildid}"
 
     # Sign manifest
-    cosign sign -y --key private.key ${image}:${version}.${buildid}
+    retry 5 60 cosign sign -y --key private.key ${image}:${version}.${buildid}
 
     # Update "un-versioned" tag (only major version)
-    buildah manifest push \
+    retry 5 60 buildah manifest push \
         "${image}:${version}.${buildid}" \
         "docker://${image}:${version}"
 
     # Sign manifest
-    cosign sign -y --key private.key ${image}:${version}
+    retry 5 60 cosign sign -y --key private.key ${image}:${version}
 
     if [[ "${variant}" == "kinoite-nightly" ]]; then
         # Update latest tag for kinoite-nightly only
