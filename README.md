@@ -22,7 +22,7 @@ Atomic variant.
 
 Each variant is described in a YAML
 [treefile](https://coreos.github.io/rpm-ostree/treefile/) which is then used by
-rpm-ostree to compose an ostree commit with the package requested.
+rpm-ostree to compose an ostree commit or OCI image with the package requested.
 
 In the Fedora infrastructure, composes are made via
 [pungi](https://pagure.io/pungi) with the configuration from:
@@ -35,6 +35,41 @@ In the Fedora infrastructure, composes are made via
 Installer ISOs are built using [Lorax](https://github.com/weldr/lorax) and
 additional templates:
 [pagure.io/fedora-lorax-templates](https://pagure.io/fedora-lorax-templates).
+
+## Compose Methods and Outputs
+
+There are a few different ways Fedora Atomic Desktop images are currently produced.
+
+### 1. Official Pungi Compose (OSTree Commit)
+
+This is the traditional method for creating the official Fedora Atomic Desktops.
+
+- **Source Repository**: `workstation-ostree-config` (this repository)
+- **Compose Tool**: Fedora's official [Pungi](https://pagure.io/pungi) composer.
+- **Output Type**: A classic OSTree commit.
+- **Details**: This is the standard, officially supported output that is used to deliver updates to users.
+
+### 2. Official Pungi Compose (OCI Image)
+
+Fedora infrastructure also produces OCI (bootable container) images from the manifests in this repository.
+
+- **Source Repository**: `workstation-ostree-config` (this repository)
+- **Compose Tool**: Fedora's official [Pungi](https://pagure.io/pungi) composer.
+- **Output Type**: An OCI container image.
+- **Output Location**: `quay.io/fedora/fedora-<variant_name>` (e.g., `quay.io/fedora/fedora-silverblue`)
+- **Details**: These official images are unsigned and do not have historical tags (e.g., `40.20240422.0`).
+
+### 3. Unofficial CI-Test Builds (OCI Image)
+
+For testing and development purposes, an unofficial set of OCI images are built using a separate repository that mirrors the manifests from this one but adds a GitLab CI pipeline.
+
+- **Source Repository**: [gitlab.com/fedora/ostree/ci-test](https://gitlab.com/fedora/ostree/ci-test)
+- **Compose Tool**: GitLab CI.
+- **Output Type**: An OCI container image.
+- **Output Location**: `quay.io/fedora-ostree-desktops/<variant_name>` (e.g., `quay.io/fedora-ostree-desktops/silverblue`)
+- **Details**: These images are unofficial and intended for testing. Unlike the official OCI images, they are `cosign` signed, retain historical tags, and are subject to a 4-week expiry policy on the container registry.
+
+The goal is to eventually use a similar CI pipeline-centric flow, with signing and historical tags, for the official releases.
 
 ## Website
 
