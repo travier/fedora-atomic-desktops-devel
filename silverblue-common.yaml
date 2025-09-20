@@ -35,3 +35,18 @@ packages:
 exclude-packages:
   # Exclude GNOME Software's langpack plugin to avoid layering langpacks on Silverblue
   - gnome-software-fedora-langpacks
+
+# Skip Third Party Software page in GNOME Initial Setup as it currently does
+# not work. See: https://bugzilla.redhat.com/show_bug.cgi?id=2362164
+# Users will be offered the option to enable third party repositories again the
+# first time they open GNOME Software.
+postprocess:
+  - |
+    #!/bin/bash
+    set -xeuo pipefail
+
+    cat > /usr/share/gnome-initial-setup/vendor.conf << 'EOF'
+    [pages]
+    # Do not show the Third Party Software page
+    skip=software
+    EOF
