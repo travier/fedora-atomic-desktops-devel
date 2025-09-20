@@ -194,15 +194,11 @@ def main():
     # List of comps groups used for each variant
     variant_comps_groups = {
         "budgie-atomic": ["budgie-desktop", "budgie-desktop-apps", "base-x"],
-        "cinnamon-atomic": ["cinnamon-desktop", "base-x"],
         "cosmic-atomic": ["cosmic-desktop", "cosmic-desktop-apps", "base-graphical"],
         "kinoite": ["kde-desktop", "base-graphical"],
         "kinoite-mobile": ["kde-mobile", "kde-mobile-apps", "base-graphical"],
-        "lxqt-atomic": ["lxqt-desktop", "base-graphical"],
-        "mate-atomic": ["mate-desktop", "base-x"],
         "silverblue": ["gnome-desktop", "base-graphical"],
         "sway-atomic": ["swaywm", "swaywm-extended", "base-graphical"],
-        "xfce-atomic": ["xfce-desktop", "xfce-apps", "xfce-extra-plugins", "base-x"],
     }
 
     # Generate treefiles for all variants
