@@ -42,9 +42,6 @@ conditional-include:
     include:
       - bootc.yaml
       - dnf5.yaml
-  - if: exclude_perl == true
-    include:
-      - exclude-perl.yaml
 
 packages:
   # Ensure that we have a kernel. Kernel packages are not in any comps group
@@ -157,6 +154,9 @@ exclude-packages:
   - qemu-device-display-virtio-vga
   # See: https://github.com/fedora-silverblue/issue-tracker/issues/646
   - hplip-gui
+  # Ensure that we do not include any Perl package
+  - perl-interpreter
+  - perl-libs
 
 postprocess:
   - |
