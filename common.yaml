@@ -25,6 +25,8 @@ include:
   - kernel-install.yaml
   # Enable composefs
   - composefs.yaml
+  # Fixes for Fedora Third Party
+  - fedora.yaml
 
 arch-include:
   x86_64:
