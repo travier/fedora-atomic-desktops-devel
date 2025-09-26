@@ -13,7 +13,6 @@ packages:
   - foot
   - fprintd-pam
   - gnome-keyring-pam
-  - gnome-themes-extra
   - grim
   - gvfs
   - gvfs-smb
