@@ -1,0 +1,8 @@
+# Enable the fedora-third-party-refresh.service unit that was meant for Atomic
+# Desktops but never got enabled.
+postprocess:
+  - |
+    #!/bin/bash
+    set -xeuo pipefail
+
+    echo "enable fedora-third-party-refresh.service" >> /usr/lib/systemd/system-preset/81-atomic-desktop.preset
