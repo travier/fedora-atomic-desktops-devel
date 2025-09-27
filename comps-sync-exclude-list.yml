@@ -160,6 +160,9 @@ desktop_exclude_list:
     - NetworkManager-libreswan-gnome
     - NetworkManager-sstp-gnome
     - NetworkManager-strongswan-gnome
+    # Pulled-in via the common set of packages
+    - fedora-flathub-remote
+    - fedora-workstation-repositories
   budgie-desktop-apps:
     # Non-critical apps -> Flatpak
     - atril
@@ -187,9 +190,15 @@ desktop_exclude_list:
     - toolbox
     # Already included by default for all variants
     - glibc-all-langpacks
+    # Pulled-in via the common set of packages
+    - fedora-flathub-remote
+    - fedora-workstation-repositories
   kde-mobile:
     # Already included by default for all variants
     - glibc-all-langpacks
+    # Pulled-in via the common set of packages
+    - fedora-flathub-remote
+    - fedora-workstation-repositories
   swaywm-extended:
     # Non-critical apps -> Flatpak
     - mpv
