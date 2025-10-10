@@ -50,7 +50,6 @@ packages:
   - default-fonts-other-mono
   - default-fonts-other-sans
   - default-fonts-other-serif
-  - dhcp-client
   - dnsmasq
   - e2fsprogs
   - ethtool
