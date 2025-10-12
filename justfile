@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: Fedora Atomic Desktops maintainers
+# SPDX-License-Identifier: MIT
+
 # This is a justfile. See https://github.com/casey/just
 # This is only used for local development. The builds made on the Fedora
 # infrastructure are run via Pungi in a Koji runroot.

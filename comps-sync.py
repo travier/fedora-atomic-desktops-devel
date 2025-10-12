@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+# SPDX-FileCopyrightText: Fedora Atomic Desktops maintainers
+# SPDX-License-Identifier: MIT
+
 '''
 Usage: ./comps-sync.py [--save] /path/to/comps-f43.xml.in
 
