@@ -1,4 +1,6 @@
 #!/bin/bash
+
+# SPDX-FileCopyrightText: Fedora Atomic Desktops maintainers
 # SPDX-License-Identifier: MIT
 
 set -euo pipefail
@@ -26,6 +28,7 @@ fi
 
 {
 cat <<EOF
+# SPDX-FileCopyrightText: Fedora Atomic Desktops maintainers
 # SPDX-License-Identifier: MIT
 
 # Only used in https://gitlab.com/fedora/ostree/ci-test

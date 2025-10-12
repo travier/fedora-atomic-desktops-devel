@@ -1,0 +1,17 @@
+version = 1
+
+[[annotations]]
+path = [
+  "*.repo",
+  "*.yaml",
+  ".gitignore",
+  "README.md",
+  "ci/*",
+  "comps-sync-exclude-list.yml",
+  "group",
+  "passwd",
+]
+SPDX-FileCopyrightText = [
+    "Fedora Atomic Desktops maintainers",
+]
+SPDX-License-Identifier = "MIT"
