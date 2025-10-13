@@ -1,15 +1,14 @@
+metadata:
+  summary: "Fedora Kinoite Mobile"
+
 variables:
   variant: "kinoite-mobile"
 
-include:
-  - kinoite-common.yaml
-
 # Override the default Kinoite ref from the kinoite-common.yaml manifest
 ref: fedora/42/${basearch}/kinoite-mobile
-rojig:
-  name: fedora-kde
-  summary: "Fedora Kinoite Mobile"
-  license: MIT
+
+include:
+  - kinoite-common.yaml
 
 # Kept in the leaf manifest as they are overwritten by Pungi in composes
 repos:

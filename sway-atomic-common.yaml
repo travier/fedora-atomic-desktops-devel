@@ -1,15 +1,14 @@
+metadata:
+  summary: "Fedora Sway Atomic"
+
 variables:
   variant: "sway-atomic"
+
+ref: fedora/42/${basearch}/sericea
 
 include:
   - common.yaml
   - sway-atomic-packages.yaml
-
-ref: fedora/42/${basearch}/sericea
-rojig:
-  name: fedora-sericea
-  summary: "Fedora Sway Atomic"
-  license: MIT
 
 packages:
   - fedora-release-sway-atomic

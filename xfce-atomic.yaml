@@ -1,16 +1,15 @@
+metadata:
+  summary: "Fedora XFCE Atomic"
+
 variables:
   variant: "xfce-atomic"
   exclude_perl: false
 
+ref: fedora/42/${basearch}/xfce-atomic
+
 include:
   - common.yaml
   - xfce-atomic-packages.yaml
-
-ref: fedora/42/${basearch}/vauxite
-rojig:
-  name: fedora-vauxite
-  summary: "Fedora XFCE Atomic"
-  license: MIT
 
 packages:
   - fedora-release-xfce

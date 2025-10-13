@@ -1,14 +1,13 @@
+metadata:
+  summary: "Fedora Base Atomic"
+
 variables:
   variant: "base-atomic"
 
+ref: fedora/42/${basearch}/base-atomic
+
 include:
   - common.yaml
-
-ref: fedora/42/${basearch}/base
-rojig:
-  name: fedora-base
-  summary: "Fedora Base Atomic"
-  license: MIT
 
 packages:
   # Generic release package for desktop variants

@@ -1,15 +1,14 @@
+metadata:
+  summary: "Fedora Deepin Atomic"
+
 variables:
   variant: "deepin-atomic"
+
+ref: fedora/42/${basearch}/deepin-atomic
 
 include:
   - common.yaml
   - deepin-atomic-packages.yaml
-
-ref: fedora/42/${basearch}/deepin
-rojig:
-  name: fedora-deepin
-  summary: "Fedora Deepin Atomic"
-  license: MIT
 
 packages:
   # Generic release package for desktop variants

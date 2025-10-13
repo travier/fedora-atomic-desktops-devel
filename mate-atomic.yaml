@@ -1,15 +1,14 @@
+metadata:
+  summary: "Fedora Mate Atomic"
+
 variables:
   variant: "mate-atomic"
+
+ref: fedora/42/${basearch}/mate-atomic
 
 include:
   - common.yaml
   - mate-atomic-packages.yaml
-
-ref: fedora/42/${basearch}/mate
-rojig:
-  name: fedora-mate
-  summary: "Fedora Mate Atomic"
-  license: MIT
 
 packages:
   # Generic release sub package for desktop variants

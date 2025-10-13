@@ -1,16 +1,15 @@
+metadata:
+  summary: "Fedora LXQt Atomic"
+
 variables:
   variant: "lxqt-atomic"
   exclude_perl: false
 
+ref: fedora/42/${basearch}/lazurite
+
 include:
   - common.yaml
   - lxqt-atomic-packages.yaml
-
-ref: fedora/42/${basearch}/lazurite
-rojig:
-  name: fedora-lxqt
-  summary: "Fedora LXQt Atomic"
-  license: MIT
 
 packages:
   # Generic release package for desktop variants

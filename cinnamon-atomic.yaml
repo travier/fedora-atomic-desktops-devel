@@ -1,15 +1,14 @@
+metadata:
+  summary: "Fedora Cinnamon Atomic"
+
 variables:
   variant: "cinnamon-atomic"
+
+ref: fedora/42/${basearch}/cinnamon-atomic
 
 include:
   - common.yaml
   - cinnamon-atomic-packages.yaml
-
-ref: fedora/42/${basearch}/cinnamon
-rojig:
-  name: fedora-cinnamon
-  summary: "Fedora Cinnamon Atomic"
-  license: MIT
 
 packages:
   # Portals for Flatpak

@@ -1,15 +1,14 @@
+metadata:
+  summary: "Fedora Silverblue"
+
 variables:
   variant: "silverblue"
+
+ref: fedora/42/${basearch}/silverblue
 
 include:
   - common.yaml
   - silverblue-packages.yaml
-
-ref: fedora/42/${basearch}/silverblue
-rojig:
-  name: fedora-silverblue
-  summary: "Fedora Silverblue"
-  license: MIT
 
 packages:
   - fedora-release-silverblue
