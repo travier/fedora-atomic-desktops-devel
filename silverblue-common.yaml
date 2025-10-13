@@ -33,11 +33,6 @@ packages:
   # See: https://github.com/fedora-silverblue/issue-tracker/issues/201
   - openssl
 
-# Make sure the following are not pulled in when Recommended by other packages
-exclude-packages:
-  # Exclude GNOME Software's langpack plugin to avoid layering langpacks on Silverblue
-  - gnome-software-fedora-langpacks
-
 # Skip Third Party Software page in GNOME Initial Setup as it currently does
 # not work. See: https://bugzilla.redhat.com/show_bug.cgi?id=2362164
 # Users will be offered the option to enable third party repositories again the
