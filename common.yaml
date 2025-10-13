@@ -155,6 +155,9 @@ exclude-packages:
   - qemu-device-display-virtio-vga
   # See: https://github.com/fedora-silverblue/issue-tracker/issues/646
   - hplip-gui
+  # Exclude GNOME Software's langpack plugin to avoid layering langpacks on
+  # systems where GNOME Software is included
+  - gnome-software-fedora-langpacks
 
 postprocess:
   - |
