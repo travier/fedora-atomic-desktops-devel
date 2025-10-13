@@ -6,6 +6,8 @@ mutate-os-release: "${releasever}"
 variables:
   # Default to Bootable Containers and override in classic ostree manifests
   bootable_container: true
+  # Default to including Fedora branding and specific packages
+  distro: "fedora"
 
 # Default to `bash` in our container, the same as other containers we ship.
 container-cmd:
@@ -24,8 +26,6 @@ include:
   - kernel-install.yaml
   # Enable composefs
   - composefs.yaml
-  # Fixes for Fedora Third Party
-  - fedora.yaml
 
 arch-include:
   x86_64:
@@ -34,6 +34,10 @@ arch-include:
     - qemu-user-static-non-x86_64.yaml
 
 conditional-include:
+  # Manifests included only if we are building for Fedora
+  - if: distro == "fedora"
+    include:
+      - fedora.yaml
   # Manifests included only for classic ostree variants
   - if: bootable_container == false
     include:
@@ -72,9 +76,6 @@ packages:
   # Flatpak support
   - flatpak
   - xdg-desktop-portal
-  # Contains default ostree remote config to be used on client's
-  # system for fetching ostree update
-  - fedora-repos-ostree
   # the archive repo for more reliable package layering
   # https://github.com/coreos/fedora-coreos-tracker/issues/400
   - fedora-repos-archive

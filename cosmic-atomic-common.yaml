@@ -11,6 +11,5 @@ include:
   - packages/cosmic-atomic.yaml
 
 packages:
-  - fedora-release-cosmic-atomic
   # Portals for Flatpak
   - xdg-desktop-portal-gtk
