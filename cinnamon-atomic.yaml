@@ -8,7 +8,7 @@ ref: fedora/42/${basearch}/cinnamon-atomic
 
 include:
   - common.yaml
-  - cinnamon-atomic-packages.yaml
+  - packages/cinnamon-atomic.yaml
 
 packages:
   # Portals for Flatpak

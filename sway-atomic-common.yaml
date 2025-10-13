@@ -8,7 +8,7 @@ ref: fedora/42/${basearch}/sericea
 
 include:
   - common.yaml
-  - sway-atomic-packages.yaml
+  - packages/sway-atomic.yaml
 
 packages:
   - fedora-release-sway-atomic

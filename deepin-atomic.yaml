@@ -8,7 +8,7 @@ ref: fedora/42/${basearch}/deepin-atomic
 
 include:
   - common.yaml
-  - deepin-atomic-packages.yaml
+  - packages/deepin-atomic.yaml
 
 packages:
   # Generic release package for desktop variants

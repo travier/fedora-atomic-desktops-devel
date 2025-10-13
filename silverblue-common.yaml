@@ -8,7 +8,7 @@ ref: fedora/42/${basearch}/silverblue
 
 include:
   - common.yaml
-  - silverblue-packages.yaml
+  - packages/silverblue.yaml
 
 packages:
   - fedora-release-silverblue

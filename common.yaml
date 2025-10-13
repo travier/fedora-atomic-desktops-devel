@@ -15,7 +15,7 @@ container-cmd:
 
 include:
   # Packages common to all variants
-  - common-packages.yaml
+  - packages/common.yaml
   # See: https://gitlab.com/fedora/ostree/sig/-/issues/1
   - bootupd.yaml
   # Dracut configuration for the initramfs

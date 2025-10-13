@@ -9,7 +9,7 @@ ref: fedora/42/${basearch}/xfce-atomic
 
 include:
   - common.yaml
-  - xfce-atomic-packages.yaml
+  - packages/xfce-atomic.yaml
 
 packages:
   - fedora-release-xfce

@@ -8,7 +8,7 @@ ref: fedora/42/${basearch}/mate-atomic
 
 include:
   - common.yaml
-  - mate-atomic-packages.yaml
+  - packages/mate-atomic.yaml
 
 packages:
   # Generic release sub package for desktop variants

@@ -9,7 +9,7 @@ ref: fedora/42/${basearch}/lazurite
 
 include:
   - common.yaml
-  - lxqt-atomic-packages.yaml
+  - packages/lxqt-atomic.yaml
 
 packages:
   # Generic release package for desktop variants
