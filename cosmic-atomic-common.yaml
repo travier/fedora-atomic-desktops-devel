@@ -8,7 +8,7 @@ ref: fedora/rawhide/${basearch}/cosmic-atomic
 
 include:
   - common.yaml
-  - cosmic-atomic-packages.yaml
+  - packages/cosmic-atomic.yaml
 
 packages:
   - fedora-release-cosmic-atomic

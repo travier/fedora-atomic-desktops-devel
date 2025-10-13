@@ -4,6 +4,7 @@ version = 1
 path = [
   "*.repo",
   "*.yaml",
+  "packages/*.yaml",
   ".gitignore",
   "README.md",
   "ci/*",

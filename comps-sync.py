@@ -192,7 +192,7 @@ def main():
     # Return code indicates if changes have or would have been done
     ret = 0
 
-    ret += update_manifests_from_groups(comps, groups, 'common-packages.yaml', "common", args.save, comps_exclude_list, comps_exclude_list_all)
+    ret += update_manifests_from_groups(comps, groups, 'packages/common.yaml', "common", args.save, comps_exclude_list, comps_exclude_list_all)
 
     # List of comps groups used for each variant
     variant_comps_groups = {
@@ -207,7 +207,7 @@ def main():
     # Generate treefiles for all variants
     for variant, groups in variant_comps_groups.items():
         print()
-        ret += update_manifests_from_groups(comps, groups, f'{variant}-packages.yaml', variant, args.save, comps_desktop_exclude_list, comps_exclude_list_all)
+        ret += update_manifests_from_groups(comps, groups, f'packages/{variant}.yaml', variant, args.save, comps_desktop_exclude_list, comps_exclude_list_all)
 
     if not args.save and ret != 0:
         sys.exit(1)
