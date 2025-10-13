@@ -5,8 +5,6 @@ mutate-os-release: "${releasever}"
 variables:
   # Default to Bootable Containers and override in classic ostree manifests
   bootable_container: true
-  # Exclude Perl by default and override for XFCE & LXQt
-  exclude_perl: true
 
 # Default to `bash` in our container, the same as other containers we ship.
 container-cmd:
