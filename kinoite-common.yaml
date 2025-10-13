@@ -14,10 +14,10 @@ include:
 conditional-include:
   - if: variant == "kinoite"
     include:
-      - kinoite-packages.yaml
+      - packages/kinoite.yaml
   - if: variant == "kinoite-mobile"
     include:
-      - kinoite-mobile-packages.yaml
+      - packages/kinoite-mobile.yaml
 
 packages:
   - fedora-release-kinoite

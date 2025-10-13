@@ -8,7 +8,7 @@ ref: fedora/43/${basearch}/onyx
 
 include:
   - common.yaml
-  - budgie-atomic-packages.yaml
+  - packages/budgie-atomic.yaml
 
 packages:
   - fedora-release-budgie-atomic
