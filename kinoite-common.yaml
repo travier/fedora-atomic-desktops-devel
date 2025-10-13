@@ -1,9 +1,15 @@
-include:
-  - common.yaml
+metadata:
+  summary: "Fedora Kinoite"
 
 # Default to Kinoite and override in Kinoite Mobile manifests
 variables:
   variant: "kinoite"
+
+# Default to Kinoite (Desktop). Overriden in the Kinoite Mobile manifest
+ref: fedora/rawhide/${basearch}/kinoite
+
+include:
+  - common.yaml
 
 conditional-include:
   - if: variant == "kinoite"
@@ -12,13 +18,6 @@ conditional-include:
   - if: variant == "kinoite-mobile"
     include:
       - kinoite-mobile-packages.yaml
-
-# Default to Kinoite (Desktop). Overriden in the Kinoite Mobile manifest
-ref: fedora/rawhide/${basearch}/kinoite
-rojig:
-  name: fedora-kde
-  summary: "Fedora Kinoite"
-  license: MIT
 
 packages:
   - fedora-release-kinoite

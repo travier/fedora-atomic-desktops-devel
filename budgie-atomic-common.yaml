@@ -1,15 +1,14 @@
+metadata:
+  summary: "Fedora Budgie Atomic"
+
 variables:
   variant: "budgie-atomic"
+
+ref: fedora/rawhide/${basearch}/onyx
 
 include:
   - common.yaml
   - budgie-atomic-packages.yaml
-
-ref: fedora/rawhide/${basearch}/onyx
-rojig:
-  name: fedora-onyx
-  summary: "Fedora Budgie Atomic"
-  license: MIT
 
 packages:
   - fedora-release-budgie-atomic

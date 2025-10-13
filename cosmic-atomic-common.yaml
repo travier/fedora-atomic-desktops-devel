@@ -1,15 +1,14 @@
+metadata:
+  summary: "Fedora COSMIC Atomic"
+
 variables:
   variant: "cosmic-atomic"
+
+ref: fedora/rawhide/${basearch}/cosmic-atomic
 
 include:
   - common.yaml
   - cosmic-atomic-packages.yaml
-
-ref: fedora/rawhide/${basearch}/cosmic-atomic
-rojig:
-  name: fedora-cosmic
-  summary: "Fedora COSMIC Atomic"
-  license: MIT
 
 packages:
   - fedora-release-cosmic-atomic
