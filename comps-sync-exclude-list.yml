@@ -98,6 +98,14 @@ exclude_list:
     - qadwaitadecorations-qt5
     # X11 specific
     - xorg-x11-drv-libinput
+    # Included explicitly in the fedora.yaml manifest
+    - fedora-chromium-config
+    - fedora-flathub-remote
+    - fedora-workstation-backgrounds
+    - fedora-workstation-repositories
+  firefox:
+    # Included explicitly in the fedora.yaml manifest
+    - fedora-bookmarks
   networkmanager-submodules:
     # Let's use the builtin one by default
     - dhcp-client
@@ -161,6 +169,9 @@ desktop_exclude_list:
     - NetworkManager-libreswan-gnome
     - NetworkManager-sstp-gnome
     - NetworkManager-strongswan-gnome
+    # Included explicitly in the fedora.yaml manifest
+    - fedora-flathub-remote
+    - fedora-workstation-repositories
   budgie-desktop-apps:
     # Non-critical apps -> Flatpak
     - atril
@@ -188,6 +199,9 @@ desktop_exclude_list:
     - toolbox
     # Already included by default for all variants
     - glibc-all-langpacks
+    # Included explicitly in the fedora.yaml manifest
+    - fedora-flathub-remote
+    - fedora-workstation-repositories
   kde-mobile:
     # Already included by default for all variants
     - glibc-all-langpacks
@@ -270,6 +284,8 @@ desktop_exclude_list:
     - NetworkManager-team
     # Already in the common set
     - wireplumber
+    # Included explicitly in the fedora.yaml manifest
+    - fedora-release-matecompiz
   swaywm-extended:
     # Non-critical apps -> Flatpak
     - mpv

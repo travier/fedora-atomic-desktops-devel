@@ -12,9 +12,6 @@ include:
   - packages/xfce-atomic.yaml
 
 packages:
-  - fedora-release-xfce
-  # Generic release sub package for desktop variants
-  - fedora-release-ostree-desktop
   # Portals for Flatpak
   - xdg-desktop-portal-gtk
 

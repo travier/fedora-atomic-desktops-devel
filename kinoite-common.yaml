@@ -20,7 +20,6 @@ conditional-include:
       - packages/kinoite-mobile.yaml
 
 packages:
-  - fedora-release-kinoite
   # Install some minor optional tools for KInfoCenter
   - vulkan-tools
   - xdpyinfo
@@ -34,9 +33,6 @@ packages:
   - NetworkManager-ppp
   # Install gdb to make getting backtraces work with DrKonqi
   - gdb
-  # Explicitely not included via comps
-  # See: https://pagure.io/fedora-kde/SIG/issue/295
-  - plasma-welcome-fedora
   # Make sure rpm-ostree support is installed
   - plasma-discover-rpm-ostree
 

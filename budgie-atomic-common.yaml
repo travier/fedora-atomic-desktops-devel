@@ -10,9 +10,6 @@ include:
   - common.yaml
   - packages/budgie-atomic.yaml
 
-packages:
-  - fedora-release-budgie-atomic
-
 # Make sure the following are not pulled in when Recommended by other packages
 exclude-packages:
   # Not needed in Budgie Desktop

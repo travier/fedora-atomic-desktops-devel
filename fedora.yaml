@@ -1,0 +1,61 @@
+# All Fedora specific packages and configuration
+packages:
+  - fedora-bookmarks
+  - fedora-chromium-config
+  - fedora-flathub-remote
+  - fedora-workstation-backgrounds
+  - fedora-workstation-repositories
+  # Contains default ostree remote config to be used on client's
+  # system for fetching ostree update
+  - fedora-repos-ostree
+
+# Fedora specific packages for each variant
+conditional-include:
+  - if: variant == "silverblue"
+    include:
+      packages:
+        - fedora-release-silverblue
+  - if: variant == "kinoite"
+    include:
+      packages:
+        - fedora-release-kinoite
+        # Explicitely not included via comps
+        # See: https://pagure.io/fedora-kde/SIG/issue/295
+        - plasma-welcome-fedora
+  - if: variant == "sway-atomic"
+    include:
+      packages:
+        - fedora-release-sway-atomic
+  - if: variant == "budgie-atomic"
+    include:
+      packages:
+        - fedora-release-budgie-atomic
+  - if: variant == "cosmic-atomic"
+    include:
+      packages:
+        - fedora-release-cosmic-atomic
+  - if: variant == "cinnamon-atomic"
+    include:
+      packages:
+        - fedora-release
+        - fedora-release-ostree-desktop
+  - if: variant == "deepin-atomic"
+    include:
+      packages:
+        - fedora-release
+        - fedora-release-ostree-desktop
+  - if: variant == "lxqt-atomic"
+    include:
+      packages:
+        - fedora-release
+        - fedora-release-ostree-desktop
+  - if: variant == "mate-atomic"
+    include:
+      packages:
+        - fedora-release-matecompiz
+        - fedora-release-ostree-desktop
+  - if: variant == "xfce-atomic"
+    include:
+      packages:
+        - fedora-release-xfce
+        - fedora-release-ostree-desktop

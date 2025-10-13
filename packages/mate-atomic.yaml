@@ -28,7 +28,6 @@ packages:
   - f38-backgrounds-extras-base
   - f38-backgrounds-extras-mate
   - f38-backgrounds-mate
-  - fedora-release-matecompiz
   - firefox
   - firewall-config
   - glx-utils

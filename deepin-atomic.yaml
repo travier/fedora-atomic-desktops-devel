@@ -11,9 +11,6 @@ include:
   - packages/deepin-atomic.yaml
 
 packages:
-  # Generic release package for desktop variants
-  - fedora-release
-  - fedora-release-ostree-desktop
   # GUI to manage updates & Flatpaks
   - gnome-software
 
