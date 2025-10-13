@@ -154,6 +154,9 @@ exclude-packages:
   # Ensure that we do not include any Perl package
   - perl-interpreter
   - perl-libs
+  # Exclude GNOME Software's langpack plugin to avoid layering langpacks on
+  # systems where GNOME Software is included
+  - gnome-software-fedora-langpacks
 
 postprocess:
   - |
