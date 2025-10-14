@@ -5,8 +5,6 @@ variables:
   variant: "lxqt-atomic"
   exclude_perl: false
 
-ref: fedora/42/${basearch}/lazurite
-
 include:
   - common.yaml
   - packages/lxqt-atomic.yaml

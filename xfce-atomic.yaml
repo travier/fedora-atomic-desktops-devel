@@ -5,8 +5,6 @@ variables:
   variant: "xfce-atomic"
   exclude_perl: false
 
-ref: fedora/42/${basearch}/xfce-atomic
-
 include:
   - common.yaml
   - packages/xfce-atomic.yaml

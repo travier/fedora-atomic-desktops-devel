@@ -4,8 +4,6 @@ metadata:
 variables:
   variant: "deepin-atomic"
 
-ref: fedora/42/${basearch}/deepin-atomic
-
 include:
   - common.yaml
   - packages/deepin-atomic.yaml

@@ -4,8 +4,6 @@ metadata:
 variables:
   variant: "mate-atomic"
 
-ref: fedora/42/${basearch}/mate-atomic
-
 include:
   - common.yaml
   - packages/mate-atomic.yaml

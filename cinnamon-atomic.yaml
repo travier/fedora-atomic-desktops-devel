@@ -4,8 +4,6 @@ metadata:
 variables:
   variant: "cinnamon-atomic"
 
-ref: fedora/42/${basearch}/cinnamon-atomic
-
 include:
   - common.yaml
   - packages/cinnamon-atomic.yaml
