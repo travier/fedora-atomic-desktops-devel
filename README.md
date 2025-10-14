@@ -201,7 +201,7 @@ sed -i "s/43/44/g" README.md
 rm fedora-rawhide.repo
 sed -i --follow-symlinks "/- fedora-rawhide/d" *.yaml
 sed -i --follow-symlinks "s/# - fedora-43/- fedora-43/" *.yaml
-sed -i --follow-symlinks "s/ref: fedora\/rawhide/ref: fedora\/43/" *.yaml
+sed -i "s/releasever_ref: \"rawhide\"/releasever_ref: \"43\"/" common.yaml
 ```
 
 ## Historical references

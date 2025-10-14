@@ -4,8 +4,6 @@ metadata:
 variables:
   variant: "cosmic-atomic"
 
-ref: fedora/43/${basearch}/cosmic-atomic
-
 include:
   - common.yaml
   - packages/cosmic-atomic.yaml

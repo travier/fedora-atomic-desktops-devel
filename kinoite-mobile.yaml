@@ -4,8 +4,6 @@ metadata:
 variables:
   variant: "kinoite-mobile"
 
-ref: fedora/43/${basearch}/kinoite-mobile
-
 include:
   - kinoite-common.yaml
 
