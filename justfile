@@ -156,7 +156,7 @@ compose-legacy variant=default_variant:
         exit 1
     fi
 
-    ./ci/validate > /dev/null || (echo "Failed manifest validation" && exit 1)
+    just validate > /dev/null || (echo "Failed manifest validation" && exit 1)
 
     mkdir -p repo cache logs
     if [[ ! -f "repo/config" ]]; then
@@ -211,7 +211,7 @@ compose-image variant=default_variant:
         exit 1
     fi
 
-    ./ci/validate > /dev/null || (echo "Failed manifest validation" && exit 1)
+    just validate > /dev/null || (echo "Failed manifest validation" && exit 1)
 
     mkdir -p repo cache
     if [[ ! -f "repo/config" ]]; then
