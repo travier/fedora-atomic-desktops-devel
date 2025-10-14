@@ -5,9 +5,6 @@ packages:
   - fedora-flathub-remote
   - fedora-workstation-backgrounds
   - fedora-workstation-repositories
-  # Contains default ostree remote config to be used on client's
-  # system for fetching ostree update
-  - fedora-repos-ostree
 
 # Fedora specific packages for each variant
 conditional-include:
@@ -41,6 +38,11 @@ conditional-include:
     include:
       packages:
         - fedora-release-cosmic-atomic
+  # Include ostree remote configuration only on classic ostree variants
+  - if: bootable_container == false
+    include:
+      packages:
+        - fedora-repos-ostree
 
 # Enable the fedora-third-party-refresh.service unit that was meant for Atomic
 # Desktops but never got enabled.
