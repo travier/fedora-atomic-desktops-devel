@@ -11,7 +11,7 @@ validated=0
 def openat(dirfd, name, mode='r'):
     def opener(path, flags):
         return os.open(path, flags, dir_fd=dirfd)
-    return open(name, mode, opener=opener)
+    return open(name, mode, opener=opener, encoding='UTF-8')
 
 
 def validate_shell(rootfd, name):
@@ -30,17 +30,18 @@ for root, dirs, files, rootfd in os.fwalk('.'):
             files.remove(f)
     for name in files:
         if name.endswith(('.yaml', '.yml')):
-            print("Validating:", name)
-            with open(os.open(name, dir_fd=rootfd, flags=os.O_RDONLY)) as f:
+            print("Validating:", os.path.join(root, name))
+            with open(os.open(name, dir_fd=rootfd, flags=os.O_RDONLY), encoding='UTF-8') as f:
                 yaml.safe_load(f)
-            result = subprocess.run(['grep', '-RniEv', '^(  )*[a-z#/-]|^(  )*\\[|^$|^#', name], encoding='UTF-8',
+            result = subprocess.run(['grep', '-RniEv', '^(  )*[a-z#/-]|^(  )*\\[|^$|^#', name],
+                                    encoding='UTF-8',
                                     preexec_fn=lambda: os.fchdir(rootfd))
             if result.returncode == 0:
                 raise Exception("Found likely invalid indentation in YAML file: {}".format(name))
             validated +=1
             continue
-        elif name.endswith('.sh'):
-            print("Validating:", name)
+        if name.endswith('.sh'):
+            print("Validating:", os.path.join(root, name))
             validate_shell(rootfd, name)
             continue
         stbuf = os.lstat(name, dir_fd=rootfd)
@@ -51,7 +52,7 @@ for root, dirs, files, rootfd in os.fwalk('.'):
         mimetype = subprocess.check_output(['file', '-b', '--mime-type', name], encoding='UTF-8',
                                            preexec_fn=lambda: os.fchdir(rootfd)).strip()
         if mimetype == 'text/x-shellscript':
-            print("Validating:", name)
+            print("Validating:", os.path.join(root, name))
             validate_shell(rootfd, name)
 
 print(f"Validated {validated} files")
