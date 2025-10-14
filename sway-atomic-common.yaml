@@ -4,7 +4,8 @@ metadata:
 variables:
   variant: "sway-atomic"
 
-ref: fedora/rawhide/${basearch}/sericea
+# Overriden to keep the legacy name used in Fedora
+ref: fedora/${releasever_ref}/${basearch}/sericea
 
 include:
   - common.yaml

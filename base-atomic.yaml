@@ -4,8 +4,6 @@ metadata:
 variables:
   variant: "base-atomic"
 
-ref: fedora/rawhide/${basearch}/base-atomic
-
 include:
   - common.yaml
 

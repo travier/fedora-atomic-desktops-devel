@@ -4,8 +4,6 @@ metadata:
 variables:
   variant: "silverblue"
 
-ref: fedora/rawhide/${basearch}/silverblue
-
 include:
   - common.yaml
   - packages/silverblue.yaml

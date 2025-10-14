@@ -5,9 +5,6 @@ metadata:
 variables:
   variant: "kinoite"
 
-# Default to Kinoite (Desktop). Overriden in the Kinoite Mobile manifest
-ref: fedora/rawhide/${basearch}/kinoite
-
 include:
   - common.yaml
 

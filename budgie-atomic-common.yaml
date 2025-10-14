@@ -4,7 +4,8 @@ metadata:
 variables:
   variant: "budgie-atomic"
 
-ref: fedora/rawhide/${basearch}/onyx
+# Overriden to keep the legacy name used in Fedora
+ref: fedora/${releasever_ref}/${basearch}/onyx
 
 include:
   - common.yaml
