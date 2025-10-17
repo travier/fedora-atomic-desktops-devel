@@ -38,6 +38,11 @@ conditional-include:
     include:
       packages:
         - fedora-release-cosmic-atomic
+  - if: variant == "base-atomic"
+    include:
+      packages:
+        - fedora-release
+        - fedora-release-ostree-desktop
   # Include ostree remote configuration only on classic ostree variants
   - if: bootable_container == false
     include:
