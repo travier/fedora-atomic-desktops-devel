@@ -17,6 +17,10 @@ packages:
   # Portals for Flatpak
   - xdg-desktop-portal-gtk
 
+exclude-packages:
+  # Can only be excluded on variants that do not include GNOME Software
+  - PackageKit-glib
+
 # Kept in the leaf manifest as they are overwritten by Pungi in composes
 repos:
   - fedora-42

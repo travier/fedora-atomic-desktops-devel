@@ -1,4 +1,9 @@
-# All Fedora specific packages and configuration
+# Fedora specific packages and configuration
+
+# Note that this manifest must be additive only to allow downstream users to
+# reuse the manifests in this project, excluding this one by setting the
+# "distro" variable to their own value.
+
 packages:
   - fedora-bookmarks
   - fedora-chromium-config
@@ -73,8 +78,3 @@ conditional-include:
     include:
       packages:
         - fedora-repos-ostree
-  # Can only be excluded on variants that do not include GNOME Software
-  - if: variant != "silverblue"
-    include:
-      exclude-packages:
-        - PackageKit-glib

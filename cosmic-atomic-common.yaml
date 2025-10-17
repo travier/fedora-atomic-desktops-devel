@@ -13,3 +13,7 @@ packages:
   - xdg-desktop-portal-gtk
   # Power management. Expected to be droped for tuned-ppd
   - power-profiles-daemon
+
+# Can only be excluded on variants that do not include GNOME Software
+exclude-packages:
+  - PackageKit-glib

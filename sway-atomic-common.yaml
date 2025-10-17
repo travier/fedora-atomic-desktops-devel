@@ -21,3 +21,5 @@ exclude-packages:
   - tracker-miners
   - localsearch
   - tinysparql
+  # Can only be excluded on variants that do not include GNOME Software
+  - PackageKit-glib

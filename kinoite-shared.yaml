@@ -33,3 +33,5 @@ exclude-packages:
   - plasma-workspace-x11
   # Exclude mariadb server tools that bring in Perl
   - mariadb-server-utils
+  # Can only be excluded on variants that do not include GNOME Software
+  - PackageKit-glib
