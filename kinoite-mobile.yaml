@@ -1,11 +1,5 @@
-metadata:
-  summary: "Fedora Kinoite Mobile"
-
-variables:
-  variant: "kinoite-mobile"
-
 include:
-  - kinoite-common.yaml
+  - kinoite-mobile-common.yaml
 
 # Kept in the leaf manifest as they are overwritten by Pungi in composes
 repos:
