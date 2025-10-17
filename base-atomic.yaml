@@ -14,6 +14,10 @@ packages:
   - xdg-desktop-portal
   - xdg-desktop-portal-gtk
 
+# Can only be excluded on variants that do not include GNOME Software
+exclude-packages:
+  - PackageKit-glib
+
 # Kept in the leaf manifest as they are overwritten by Pungi in composes
 repos:
   - fedora-43

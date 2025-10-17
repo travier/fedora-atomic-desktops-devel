@@ -11,3 +11,7 @@ include:
 packages:
   # Portals for Flatpak
   - xdg-desktop-portal-gtk
+
+# Can only be excluded on variants that do not include GNOME Software
+exclude-packages:
+  - PackageKit-glib
