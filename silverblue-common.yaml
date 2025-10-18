@@ -25,6 +25,8 @@ packages:
   - papers-nautilus
   # Include totem-video-thumbnailer for video thumbnailing in Nautilus
   # https://pagure.io/fedora-workstation/issue/168
+  # Totem was replaced by Showtime but we still need the thumbnailer
+  # https://pagure.io/fedora-workstation/issue/488
   - totem-video-thumbnailer
   # Make sure that GNOME Software's rpm-ostree plugin is always installed
   - gnome-software-rpm-ostree
