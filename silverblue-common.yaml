@@ -9,8 +9,6 @@ include:
   - packages/silverblue.yaml
 
 packages:
-  - desktop-backgrounds-gnome
-  - gnome-shell-extension-background-logo
   - pinentry-gnome3
   # Included for now to have layered Qt5 applications use a constistent style
   # Manually included here as it is excluded from the workstation-product group

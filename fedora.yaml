@@ -17,6 +17,8 @@ conditional-include:
     include:
       packages:
         - fedora-release-silverblue
+        - desktop-backgrounds-gnome
+        - gnome-shell-extension-background-logo
   - if: variant == "kinoite"
     include:
       packages:
