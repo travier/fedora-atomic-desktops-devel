@@ -58,7 +58,6 @@ packages:
   - exfatprogs
   - file
   - filesystem
-  - firefox
   - firewalld
   - fpaste
   - fros-gnome

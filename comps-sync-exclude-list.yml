@@ -106,6 +106,7 @@ exclude_list:
   firefox:
     # Included explicitly in the fedora.yaml manifest
     - fedora-bookmarks
+    - firefox
   networkmanager-submodules:
     # Let's use the builtin one by default
     - dhcp-client
@@ -170,6 +171,7 @@ desktop_exclude_list:
     # Included explicitly in the fedora.yaml manifest
     - fedora-flathub-remote
     - fedora-workstation-repositories
+    - firefox
   budgie-desktop-apps:
     # Non-critical apps -> Flatpak
     - atril
@@ -177,6 +179,8 @@ desktop_exclude_list:
     - gnome-calculator
     - parole
     - rhythmbox
+    # Included explicitly in the fedora.yaml manifest
+    - firefox
   kde-desktop:
     # Incompatible with ostree for various reasons
     - abrt-desktop

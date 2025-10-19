@@ -10,6 +10,9 @@ packages:
   - fedora-flathub-remote
   - fedora-workstation-backgrounds
   - fedora-workstation-repositories
+  # Must be included in the image until we figure out how to transistion users
+  # to the Flatpak'ed one. See: https://gitlab.com/fedora/ostree/sig/-/issues/3
+  - firefox
 
 # Fedora specific packages for each variant
 conditional-include:
