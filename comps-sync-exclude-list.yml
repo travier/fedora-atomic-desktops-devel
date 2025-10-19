@@ -98,6 +98,8 @@ exclude_list:
     - qadwaitadecorations-qt5
     # X11 specific
     - xorg-x11-drv-libinput
+    # See: https://gitlab.com/fedora/ostree/sig/-/issues/81
+    - plocate
   networkmanager-submodules:
     # Let's use the builtin one by default
     - dhcp-client
