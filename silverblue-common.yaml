@@ -30,6 +30,9 @@ packages:
   - totem-video-thumbnailer
   # Make sure that GNOME Software's rpm-ostree plugin is always installed
   - gnome-software-rpm-ostree
+  # Needed for GSConnect extension
+  # See: https://github.com/fedora-silverblue/issue-tracker/issues/201
+  - openssl
 
 # Make sure the following are not pulled in when Recommended by other packages
 exclude-packages:
