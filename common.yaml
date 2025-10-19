@@ -90,10 +90,6 @@ packages:
   # Always include at least full English language support by default
   # https://gitlab.com/fedora/ostree/sig/-/issues/14
   - langpacks-en
-  # Kept for backward compatibility for AppImages
-  # See: https://gitlab.com/fedora/ostree/sig/-/issues/50
-  - fuse
-  - fuse-libs
   # Selected packages from the anaconda-tools group. See: https://gitlab.com/fedora/ostree/sig/-/issues/5
   - dosfstools
   - lvm2
