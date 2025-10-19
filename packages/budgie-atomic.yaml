@@ -15,7 +15,6 @@ packages:
   - budgie-desktop-view
   - budgie-screensaver
   - dconf
-  - firefox
   - fprintd-pam
   - gedit
   - glib-networking
