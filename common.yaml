@@ -108,6 +108,8 @@ packages:
   - printer-driver-brlaser
   - ptouch-driver
   - splix
+  # See: https://github.com/fedora-silverblue/issue-tracker/issues/390
+  - wireguard-tools
 
 selinux: true
 documentation: true
