@@ -56,7 +56,6 @@ packages:
   - exfatprogs
   - file
   - filesystem
-  - firefox
   - firewalld
   - fpaste
   - fwupd

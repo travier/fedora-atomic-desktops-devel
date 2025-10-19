@@ -11,10 +11,6 @@ include:
   - common.yaml
   - packages/sway-atomic.yaml
 
-packages:
-  # explicitly list some defaults
-  - firefox
-
 exclude-packages:
   # nothing in the tree would use these
   - tracker
