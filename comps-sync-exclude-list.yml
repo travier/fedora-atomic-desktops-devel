@@ -103,6 +103,8 @@ exclude_list:
     - fedora-flathub-remote
     - fedora-workstation-backgrounds
     - fedora-workstation-repositories
+    # See: https://gitlab.com/fedora/ostree/sig/-/issues/81
+    - plocate
   firefox:
     # Included explicitly in the fedora.yaml manifest
     - fedora-bookmarks

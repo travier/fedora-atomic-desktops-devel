@@ -128,7 +128,6 @@ packages:
   - pipewire-gstreamer
   - pipewire-pulseaudio
   - pipewire-utils
-  - plocate
   - plymouth
   - plymouth-system-theme
   - policycoreutils
