@@ -10,6 +10,10 @@ include:
   - packages/xfce-atomic.yaml
 
 packages:
+  # GUI to manage updates & Flatpaks
+  - plasma-discover
+  - plasma-discover-notifier
+  - plasma-discover-rpm-ostree
   # Portals for Flatpak
   - xdg-desktop-portal-gtk
 

@@ -12,7 +12,9 @@ packages:
   # Portals for Flatpak
   - xdg-desktop-portal-gtk
   # Include GUI to manage updates & Flatpaks
-  - gnome-software
+  - plasma-discover
+  - plasma-discover-notifier
+  - plasma-discover-rpm-ostree
 
 # Kept in the leaf manifest as they are overwritten by Pungi in composes
 repos:
