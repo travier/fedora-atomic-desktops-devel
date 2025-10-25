@@ -34,6 +34,8 @@ include:
   - kernel-install.yaml
   # Enable composefs
   - composefs.yaml
+  # Selected ownership fixes for files in /etc & /var owned by a dynamic UID/GID
+  - dynamic-ugid-ownership-fixes.yaml
 
 arch-include:
   x86_64:
