@@ -20,3 +20,5 @@ exclude-packages:
   - tinysparql
   # Can only be excluded on variants that do not include GNOME Software
   - PackageKit-glib
+  # Make sure GNOME Software does not get pulled as we use Plasma Discover
+  - gnome-software
