@@ -166,6 +166,8 @@ exclude-packages:
   # Exclude GNOME Software's langpack plugin to avoid layering langpacks on
   # systems where GNOME Software is included
   - gnome-software-fedora-langpacks
+  # We include wget instead
+  - wcurl
 
 postprocess:
   - |
