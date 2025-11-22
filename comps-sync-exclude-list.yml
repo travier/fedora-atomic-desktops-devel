@@ -214,6 +214,8 @@ desktop_exclude_list:
   swaywm-extended:
     # Non-critical apps -> Flatpak
     - mpv
+    # Explicitly added in common.yaml
+    - git-core
   cosmic-desktop-apps:
     # Non-critical apps -> Flatpak
     - gnome-calculator
