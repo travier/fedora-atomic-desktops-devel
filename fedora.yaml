@@ -17,6 +17,8 @@ packages:
   # See: https://gitlab.com/fedora/ostree/sig/-/issues/50
   - fuse
   - fuse-libs
+  # Allow downstreams to use an alternative
+  - toolbox
 
 # Fedora specific packages for each variant
 conditional-include:
