@@ -12,6 +12,7 @@ packages:
   - dunst
   - foot
   - fprintd-pam
+  - git-core
   - gnome-keyring-pam
   - grim
   - gvfs
