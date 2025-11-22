@@ -105,6 +105,8 @@ exclude_list:
     - fedora-workstation-repositories
     # See: https://gitlab.com/fedora/ostree/sig/-/issues/81
     - plocate
+    # Included explicitly in the fedora.yaml manifest
+    - toolbox
   firefox:
     # Included explicitly in the fedora.yaml manifest
     - fedora-bookmarks
@@ -216,6 +218,9 @@ desktop_exclude_list:
     - mpv
     # Explicitly added in common.yaml
     - git-core
+  cosmic-desktop:
+    # Included explicitly in the fedora.yaml manifest
+    - toolbox
   cosmic-desktop-apps:
     # Non-critical apps -> Flatpak
     - gnome-calculator
