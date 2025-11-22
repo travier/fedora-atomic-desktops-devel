@@ -103,6 +103,8 @@ exclude_list:
     - fedora-flathub-remote
     - fedora-workstation-backgrounds
     - fedora-workstation-repositories
+    # Included explicitly in the fedora.yaml manifest
+    - toolbox
   firefox:
     # Included explicitly in the fedora.yaml manifest
     - fedora-bookmarks
@@ -328,6 +330,9 @@ desktop_exclude_list:
     - NetworkManager-sstp-gnome
     - NetworkManager-strongswan-gnome
     - NetworkManager-team
+  cosmic-desktop:
+    # Included explicitly in the fedora.yaml manifest
+    - toolbox
   cosmic-desktop-apps:
     # Non-critical apps -> Flatpak
     - gnome-calculator
