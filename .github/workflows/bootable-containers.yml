@@ -189,11 +189,11 @@ jobs:
       - name: "Create multi-arch manifest"
         uses: ./.github/actions/multi-arch
         with:
-          version: ${{ needs.build-base-atomic-x86_64.outputs.version }}
+          version: ${{ needs.build-silverblue-x86_64.outputs.version }}
           release: ${{ env.RELEASE }}
-          registry-path: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}
-          image-x86_64: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:${{ needs.build-base-atomic-x86_64.outputs.tag }}
-          image-aarch64: ${{ needs.build-base-atomic-aarch64.outputs.registry-path }}:${{ needs.build-base-atomic-aarch64.outputs.tag }}
+          registry-path: ${{ needs.build-silverblue-x86_64.outputs.registry-path }}
+          image-x86_64: ${{ needs.build-silverblue-x86_64.outputs.registry-path }}:${{ needs.build-silverblue-x86_64.outputs.tag }}
+          image-aarch64: ${{ needs.build-silverblue-aarch64.outputs.registry-path }}:${{ needs.build-silverblue-aarch64.outputs.tag }}
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.BOT_USERNAME }}
           password: ${{ secrets.BOT_SECRET }}
@@ -202,7 +202,7 @@ jobs:
   qcow2-silverblue-x86_64:
     runs-on: ubuntu-24.04
     needs:
-      - build-base-atomic-x86_64
+      - build-silverblue-x86_64
     steps:
       - name: "Checkout repo"
         uses: actions/checkout@v4
@@ -212,7 +212,7 @@ jobs:
         uses: ./.github/actions/qcow2
         with:
           registry: ${{ env.REGISTRY }}
-          image: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:${{ needs.build-base-atomic-x86_64.outputs.tag }}
+          image: ${{ needs.build-silverblue-x86_64.outputs.registry-path }}:${{ needs.build-silverblue-x86_64.outputs.tag }}
           variant: "silverblue"
           release: ${{ env.RELEASE }}
           username: ${{ secrets.BOT_USERNAME }}
@@ -285,11 +285,11 @@ jobs:
       - name: "Create multi-arch manifest"
         uses: ./.github/actions/multi-arch
         with:
-          version: ${{ needs.build-base-atomic-x86_64.outputs.version }}
+          version: ${{ needs.build-kinoite-x86_64.outputs.version }}
           release: ${{ env.RELEASE }}
-          registry-path: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}
-          image-x86_64: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:${{ needs.build-base-atomic-x86_64.outputs.tag }}
-          image-aarch64: ${{ needs.build-base-atomic-aarch64.outputs.registry-path }}:${{ needs.build-base-atomic-aarch64.outputs.tag }}
+          registry-path: ${{ needs.build-kinoite-x86_64.outputs.registry-path }}
+          image-x86_64: ${{ needs.build-kinoite-x86_64.outputs.registry-path }}:${{ needs.build-kinoite-x86_64.outputs.tag }}
+          image-aarch64: ${{ needs.build-kinoite-aarch64.outputs.registry-path }}:${{ needs.build-kinoite-aarch64.outputs.tag }}
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.BOT_USERNAME }}
           password: ${{ secrets.BOT_SECRET }}
@@ -298,7 +298,7 @@ jobs:
   qcow2-kinoite-x86_64:
     runs-on: ubuntu-24.04
     needs:
-      - build-base-atomic-x86_64
+      - build-kinoite-x86_64
     steps:
       - name: "Checkout repo"
         uses: actions/checkout@v4
@@ -308,7 +308,7 @@ jobs:
         uses: ./.github/actions/qcow2
         with:
           registry: ${{ env.REGISTRY }}
-          image: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:${{ needs.build-base-atomic-x86_64.outputs.tag }}
+          image: ${{ needs.build-kinoite-x86_64.outputs.registry-path }}:${{ needs.build-kinoite-x86_64.outputs.tag }}
           variant: "kinoite"
           release: ${{ env.RELEASE }}
           username: ${{ secrets.BOT_USERNAME }}
@@ -381,11 +381,11 @@ jobs:
       - name: "Create multi-arch manifest"
         uses: ./.github/actions/multi-arch
         with:
-          version: ${{ needs.build-base-atomic-x86_64.outputs.version }}
+          version: ${{ needs.build-kinoite-mobile-x86_64.outputs.version }}
           release: ${{ env.RELEASE }}
-          registry-path: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}
-          image-x86_64: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:${{ needs.build-base-atomic-x86_64.outputs.tag }}
-          image-aarch64: ${{ needs.build-base-atomic-aarch64.outputs.registry-path }}:${{ needs.build-base-atomic-aarch64.outputs.tag }}
+          registry-path: ${{ needs.build-kinoite-mobile-x86_64.outputs.registry-path }}
+          image-x86_64: ${{ needs.build-kinoite-mobile-x86_64.outputs.registry-path }}:${{ needs.build-kinoite-mobile-x86_64.outputs.tag }}
+          image-aarch64: ${{ needs.build-kinoite-mobile-aarch64.outputs.registry-path }}:${{ needs.build-kinoite-mobile-aarch64.outputs.tag }}
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.BOT_USERNAME }}
           password: ${{ secrets.BOT_SECRET }}
@@ -394,7 +394,7 @@ jobs:
   qcow2-kinoite-mobile-x86_64:
     runs-on: ubuntu-24.04
     needs:
-      - build-base-atomic-x86_64
+      - build-kinoite-mobile-x86_64
     steps:
       - name: "Checkout repo"
         uses: actions/checkout@v4
@@ -404,7 +404,7 @@ jobs:
         uses: ./.github/actions/qcow2
         with:
           registry: ${{ env.REGISTRY }}
-          image: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:${{ needs.build-base-atomic-x86_64.outputs.tag }}
+          image: ${{ needs.build-kinoite-mobile-x86_64.outputs.registry-path }}:${{ needs.build-kinoite-mobile-x86_64.outputs.tag }}
           variant: "kinoite-mobile"
           release: ${{ env.RELEASE }}
           username: ${{ secrets.BOT_USERNAME }}
@@ -477,11 +477,11 @@ jobs:
       - name: "Create multi-arch manifest"
         uses: ./.github/actions/multi-arch
         with:
-          version: ${{ needs.build-base-atomic-x86_64.outputs.version }}
+          version: ${{ needs.build-sway-atomic-x86_64.outputs.version }}
           release: ${{ env.RELEASE }}
-          registry-path: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}
-          image-x86_64: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:${{ needs.build-base-atomic-x86_64.outputs.tag }}
-          image-aarch64: ${{ needs.build-base-atomic-aarch64.outputs.registry-path }}:${{ needs.build-base-atomic-aarch64.outputs.tag }}
+          registry-path: ${{ needs.build-sway-atomic-x86_64.outputs.registry-path }}
+          image-x86_64: ${{ needs.build-sway-atomic-x86_64.outputs.registry-path }}:${{ needs.build-sway-atomic-x86_64.outputs.tag }}
+          image-aarch64: ${{ needs.build-sway-atomic-aarch64.outputs.registry-path }}:${{ needs.build-sway-atomic-aarch64.outputs.tag }}
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.BOT_USERNAME }}
           password: ${{ secrets.BOT_SECRET }}
@@ -490,7 +490,7 @@ jobs:
   qcow2-sway-atomic-x86_64:
     runs-on: ubuntu-24.04
     needs:
-      - build-base-atomic-x86_64
+      - build-sway-atomic-x86_64
     steps:
       - name: "Checkout repo"
         uses: actions/checkout@v4
@@ -500,7 +500,7 @@ jobs:
         uses: ./.github/actions/qcow2
         with:
           registry: ${{ env.REGISTRY }}
-          image: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:${{ needs.build-base-atomic-x86_64.outputs.tag }}
+          image: ${{ needs.build-sway-atomic-x86_64.outputs.registry-path }}:${{ needs.build-sway-atomic-x86_64.outputs.tag }}
           variant: "sway-atomic"
           release: ${{ env.RELEASE }}
           username: ${{ secrets.BOT_USERNAME }}
@@ -573,11 +573,11 @@ jobs:
       - name: "Create multi-arch manifest"
         uses: ./.github/actions/multi-arch
         with:
-          version: ${{ needs.build-base-atomic-x86_64.outputs.version }}
+          version: ${{ needs.build-budgie-atomic-x86_64.outputs.version }}
           release: ${{ env.RELEASE }}
-          registry-path: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}
-          image-x86_64: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:${{ needs.build-base-atomic-x86_64.outputs.tag }}
-          image-aarch64: ${{ needs.build-base-atomic-aarch64.outputs.registry-path }}:${{ needs.build-base-atomic-aarch64.outputs.tag }}
+          registry-path: ${{ needs.build-budgie-atomic-x86_64.outputs.registry-path }}
+          image-x86_64: ${{ needs.build-budgie-atomic-x86_64.outputs.registry-path }}:${{ needs.build-budgie-atomic-x86_64.outputs.tag }}
+          image-aarch64: ${{ needs.build-budgie-atomic-aarch64.outputs.registry-path }}:${{ needs.build-budgie-atomic-aarch64.outputs.tag }}
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.BOT_USERNAME }}
           password: ${{ secrets.BOT_SECRET }}
@@ -586,7 +586,7 @@ jobs:
   qcow2-budgie-atomic-x86_64:
     runs-on: ubuntu-24.04
     needs:
-      - build-base-atomic-x86_64
+      - build-budgie-atomic-x86_64
     steps:
       - name: "Checkout repo"
         uses: actions/checkout@v4
@@ -596,7 +596,7 @@ jobs:
         uses: ./.github/actions/qcow2
         with:
           registry: ${{ env.REGISTRY }}
-          image: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:${{ needs.build-base-atomic-x86_64.outputs.tag }}
+          image: ${{ needs.build-budgie-atomic-x86_64.outputs.registry-path }}:${{ needs.build-budgie-atomic-x86_64.outputs.tag }}
           variant: "budgie-atomic"
           release: ${{ env.RELEASE }}
           username: ${{ secrets.BOT_USERNAME }}
@@ -669,11 +669,11 @@ jobs:
       - name: "Create multi-arch manifest"
         uses: ./.github/actions/multi-arch
         with:
-          version: ${{ needs.build-base-atomic-x86_64.outputs.version }}
+          version: ${{ needs.build-cosmic-atomic-x86_64.outputs.version }}
           release: ${{ env.RELEASE }}
-          registry-path: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}
-          image-x86_64: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:${{ needs.build-base-atomic-x86_64.outputs.tag }}
-          image-aarch64: ${{ needs.build-base-atomic-aarch64.outputs.registry-path }}:${{ needs.build-base-atomic-aarch64.outputs.tag }}
+          registry-path: ${{ needs.build-cosmic-atomic-x86_64.outputs.registry-path }}
+          image-x86_64: ${{ needs.build-cosmic-atomic-x86_64.outputs.registry-path }}:${{ needs.build-cosmic-atomic-x86_64.outputs.tag }}
+          image-aarch64: ${{ needs.build-cosmic-atomic-aarch64.outputs.registry-path }}:${{ needs.build-cosmic-atomic-aarch64.outputs.tag }}
           registry: ${{ env.REGISTRY }}
           username: ${{ secrets.BOT_USERNAME }}
           password: ${{ secrets.BOT_SECRET }}
@@ -682,7 +682,7 @@ jobs:
   qcow2-cosmic-atomic-x86_64:
     runs-on: ubuntu-24.04
     needs:
-      - build-base-atomic-x86_64
+      - build-cosmic-atomic-x86_64
     steps:
       - name: "Checkout repo"
         uses: actions/checkout@v4
@@ -692,7 +692,7 @@ jobs:
         uses: ./.github/actions/qcow2
         with:
           registry: ${{ env.REGISTRY }}
-          image: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:${{ needs.build-base-atomic-x86_64.outputs.tag }}
+          image: ${{ needs.build-cosmic-atomic-x86_64.outputs.registry-path }}:${{ needs.build-cosmic-atomic-x86_64.outputs.tag }}
           variant: "cosmic-atomic"
           release: ${{ env.RELEASE }}
           username: ${{ secrets.BOT_USERNAME }}
