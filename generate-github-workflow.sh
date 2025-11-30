@@ -144,4 +144,4 @@ EOF
           cosign-private-key: \${{ secrets.COSIGN_PRIVATE_KEY}}
 EOF
 done
-} > .github/workflows/bootable-containers2.yml
+} > .github/workflows/bootable-containers.yml
