@@ -113,11 +113,11 @@ EOF
       - name: "Create multi-arch manifest"
         uses: ./.github/actions/multi-arch
         with:
-          version: \${{ needs.build-base-atomic-x86_64.outputs.version }}
+          version: \${{ needs.build-${variant}-x86_64.outputs.version }}
           release: \${{ env.RELEASE }}
-          registry-path: \${{ needs.build-base-atomic-x86_64.outputs.registry-path }}
-          image-x86_64: \${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:\${{ needs.build-base-atomic-x86_64.outputs.tag }}
-          image-aarch64: \${{ needs.build-base-atomic-aarch64.outputs.registry-path }}:\${{ needs.build-base-atomic-aarch64.outputs.tag }}
+          registry-path: \${{ needs.build-${variant}-x86_64.outputs.registry-path }}
+          image-x86_64: \${{ needs.build-${variant}-x86_64.outputs.registry-path }}:\${{ needs.build-${variant}-x86_64.outputs.tag }}
+          image-aarch64: \${{ needs.build-${variant}-aarch64.outputs.registry-path }}:\${{ needs.build-${variant}-aarch64.outputs.tag }}
           registry: \${{ env.REGISTRY }}
           username: \${{ secrets.BOT_USERNAME }}
           password: \${{ secrets.BOT_SECRET }}
@@ -126,7 +126,7 @@ EOF
   qcow2-${variant}-x86_64:
     runs-on: ubuntu-24.04
     needs:
-      - build-base-atomic-x86_64
+      - build-${variant}-x86_64
     steps:
       - name: "Checkout repo"
         uses: actions/checkout@v4
@@ -136,7 +136,7 @@ EOF
         uses: ./.github/actions/qcow2
         with:
           registry: \${{ env.REGISTRY }}
-          image: \${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:\${{ needs.build-base-atomic-x86_64.outputs.tag }}
+          image: \${{ needs.build-${variant}-x86_64.outputs.registry-path }}:\${{ needs.build-${variant}-x86_64.outputs.tag }}
           variant: "${variant}"
           release: \${{ env.RELEASE }}
           username: \${{ secrets.BOT_USERNAME }}
