@@ -1,0 +1,707 @@
+# SPDX-FileCopyrightText: Timothée Ravier <tim@siosm.fr>
+# SPDX-License-Identifier: CC0-1.0
+
+name: "Build Bootable Container images"
+
+env:
+  REGISTRY: "quay.io/fedora-atomic-desktops-staging"
+  RELEASE: "rawhide"
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    branches:
+      - "main"
+  workflow_dispatch:
+
+permissions: read-all
+
+# Prevent multiple workflow runs from racing to ensure that pushes are made
+# sequentialy for the main branch. Also cancel in progress workflow runs for
+# pull requests only.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  build-base-atomic-x86_64:
+    runs-on: ubuntu-24.04
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:rawhide
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --pid=host
+    outputs:
+      version: ${{ steps.build-push.outputs.version }}
+      digest: ${{ steps.build-push.outputs.digest }}
+      registry-path: ${{ steps.build-push.outputs.registry-path }}
+      tag: ${{ steps.build-push.outputs.tag }}
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build and push container image"
+        uses: ./.github/actions/build-push
+        id: build-push
+        with:
+          variant: "base-atomic"
+          release: ${{ env.RELEASE }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  build-base-atomic-aarch64:
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:rawhide
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --pid=host
+    outputs:
+      version: ${{ steps.build-push.outputs.version }}
+      digest: ${{ steps.build-push.outputs.digest }}
+      registry-path: ${{ steps.build-push.outputs.registry-path }}
+      tag: ${{ steps.build-push.outputs.tag }}
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build and push container image"
+        uses: ./.github/actions/build-push
+        id: build-push
+        with:
+          variant: "base-atomic"
+          release: ${{ env.RELEASE }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  multi-arch-base-atomic:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-base-atomic-x86_64
+      - build-base-atomic-aarch64
+    if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Create multi-arch manifest"
+        uses: ./.github/actions/multi-arch
+        with:
+          version: ${{ needs.build-base-atomic-x86_64.outputs.version }}
+          release: ${{ env.RELEASE }}
+          registry-path: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}
+          image-x86_64: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:${{ needs.build-base-atomic-x86_64.outputs.tag }}
+          image-aarch64: ${{ needs.build-base-atomic-aarch64.outputs.registry-path }}:${{ needs.build-base-atomic-aarch64.outputs.tag }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  qcow2-base-atomic-x86_64:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-base-atomic-x86_64
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build QCOW2 image"
+        uses: ./.github/actions/qcow2
+        with:
+          registry: ${{ env.REGISTRY }}
+          image: ${{ needs.build-base-atomic-x86_64.outputs.registry-path }}:${{ needs.build-base-atomic-x86_64.outputs.tag }}
+          variant: "base-atomic"
+          release: ${{ env.RELEASE }}
+          bib-config: "./bib-fedora.toml"
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  build-silverblue-x86_64:
+    runs-on: ubuntu-24.04
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:rawhide
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --pid=host
+    outputs:
+      version: ${{ steps.build-push.outputs.version }}
+      digest: ${{ steps.build-push.outputs.digest }}
+      registry-path: ${{ steps.build-push.outputs.registry-path }}
+      tag: ${{ steps.build-push.outputs.tag }}
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build and push container image"
+        uses: ./.github/actions/build-push
+        id: build-push
+        with:
+          variant: "silverblue"
+          release: ${{ env.RELEASE }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  build-silverblue-aarch64:
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:rawhide
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --pid=host
+    outputs:
+      version: ${{ steps.build-push.outputs.version }}
+      digest: ${{ steps.build-push.outputs.digest }}
+      registry-path: ${{ steps.build-push.outputs.registry-path }}
+      tag: ${{ steps.build-push.outputs.tag }}
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build and push container image"
+        uses: ./.github/actions/build-push
+        id: build-push
+        with:
+          variant: "silverblue"
+          release: ${{ env.RELEASE }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  multi-arch-silverblue:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-silverblue-x86_64
+      - build-silverblue-aarch64
+    if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Create multi-arch manifest"
+        uses: ./.github/actions/multi-arch
+        with:
+          version: ${{ needs.build-silverblue-x86_64.outputs.version }}
+          release: ${{ env.RELEASE }}
+          registry-path: ${{ needs.build-silverblue-x86_64.outputs.registry-path }}
+          image-x86_64: ${{ needs.build-silverblue-x86_64.outputs.registry-path }}:${{ needs.build-silverblue-x86_64.outputs.tag }}
+          image-aarch64: ${{ needs.build-silverblue-aarch64.outputs.registry-path }}:${{ needs.build-silverblue-aarch64.outputs.tag }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  qcow2-silverblue-x86_64:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-silverblue-x86_64
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build QCOW2 image"
+        uses: ./.github/actions/qcow2
+        with:
+          registry: ${{ env.REGISTRY }}
+          image: ${{ needs.build-silverblue-x86_64.outputs.registry-path }}:${{ needs.build-silverblue-x86_64.outputs.tag }}
+          variant: "silverblue"
+          release: ${{ env.RELEASE }}
+          bib-config: "./bib-empty.toml"
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  build-kinoite-x86_64:
+    runs-on: ubuntu-24.04
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:rawhide
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --pid=host
+    outputs:
+      version: ${{ steps.build-push.outputs.version }}
+      digest: ${{ steps.build-push.outputs.digest }}
+      registry-path: ${{ steps.build-push.outputs.registry-path }}
+      tag: ${{ steps.build-push.outputs.tag }}
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build and push container image"
+        uses: ./.github/actions/build-push
+        id: build-push
+        with:
+          variant: "kinoite"
+          release: ${{ env.RELEASE }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  build-kinoite-aarch64:
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:rawhide
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --pid=host
+    outputs:
+      version: ${{ steps.build-push.outputs.version }}
+      digest: ${{ steps.build-push.outputs.digest }}
+      registry-path: ${{ steps.build-push.outputs.registry-path }}
+      tag: ${{ steps.build-push.outputs.tag }}
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build and push container image"
+        uses: ./.github/actions/build-push
+        id: build-push
+        with:
+          variant: "kinoite"
+          release: ${{ env.RELEASE }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  multi-arch-kinoite:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-kinoite-x86_64
+      - build-kinoite-aarch64
+    if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Create multi-arch manifest"
+        uses: ./.github/actions/multi-arch
+        with:
+          version: ${{ needs.build-kinoite-x86_64.outputs.version }}
+          release: ${{ env.RELEASE }}
+          registry-path: ${{ needs.build-kinoite-x86_64.outputs.registry-path }}
+          image-x86_64: ${{ needs.build-kinoite-x86_64.outputs.registry-path }}:${{ needs.build-kinoite-x86_64.outputs.tag }}
+          image-aarch64: ${{ needs.build-kinoite-aarch64.outputs.registry-path }}:${{ needs.build-kinoite-aarch64.outputs.tag }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  qcow2-kinoite-x86_64:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-kinoite-x86_64
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build QCOW2 image"
+        uses: ./.github/actions/qcow2
+        with:
+          registry: ${{ env.REGISTRY }}
+          image: ${{ needs.build-kinoite-x86_64.outputs.registry-path }}:${{ needs.build-kinoite-x86_64.outputs.tag }}
+          variant: "kinoite"
+          release: ${{ env.RELEASE }}
+          bib-config: "./bib-empty.toml"
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  build-kinoite-mobile-x86_64:
+    runs-on: ubuntu-24.04
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:rawhide
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --pid=host
+    outputs:
+      version: ${{ steps.build-push.outputs.version }}
+      digest: ${{ steps.build-push.outputs.digest }}
+      registry-path: ${{ steps.build-push.outputs.registry-path }}
+      tag: ${{ steps.build-push.outputs.tag }}
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build and push container image"
+        uses: ./.github/actions/build-push
+        id: build-push
+        with:
+          variant: "kinoite-mobile"
+          release: ${{ env.RELEASE }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  build-kinoite-mobile-aarch64:
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:rawhide
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --pid=host
+    outputs:
+      version: ${{ steps.build-push.outputs.version }}
+      digest: ${{ steps.build-push.outputs.digest }}
+      registry-path: ${{ steps.build-push.outputs.registry-path }}
+      tag: ${{ steps.build-push.outputs.tag }}
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build and push container image"
+        uses: ./.github/actions/build-push
+        id: build-push
+        with:
+          variant: "kinoite-mobile"
+          release: ${{ env.RELEASE }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  multi-arch-kinoite-mobile:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-kinoite-mobile-x86_64
+      - build-kinoite-mobile-aarch64
+    if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Create multi-arch manifest"
+        uses: ./.github/actions/multi-arch
+        with:
+          version: ${{ needs.build-kinoite-mobile-x86_64.outputs.version }}
+          release: ${{ env.RELEASE }}
+          registry-path: ${{ needs.build-kinoite-mobile-x86_64.outputs.registry-path }}
+          image-x86_64: ${{ needs.build-kinoite-mobile-x86_64.outputs.registry-path }}:${{ needs.build-kinoite-mobile-x86_64.outputs.tag }}
+          image-aarch64: ${{ needs.build-kinoite-mobile-aarch64.outputs.registry-path }}:${{ needs.build-kinoite-mobile-aarch64.outputs.tag }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  qcow2-kinoite-mobile-x86_64:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-kinoite-mobile-x86_64
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build QCOW2 image"
+        uses: ./.github/actions/qcow2
+        with:
+          registry: ${{ env.REGISTRY }}
+          image: ${{ needs.build-kinoite-mobile-x86_64.outputs.registry-path }}:${{ needs.build-kinoite-mobile-x86_64.outputs.tag }}
+          variant: "kinoite-mobile"
+          release: ${{ env.RELEASE }}
+          bib-config: "./bib-fedora.toml"
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  build-sway-atomic-x86_64:
+    runs-on: ubuntu-24.04
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:rawhide
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --pid=host
+    outputs:
+      version: ${{ steps.build-push.outputs.version }}
+      digest: ${{ steps.build-push.outputs.digest }}
+      registry-path: ${{ steps.build-push.outputs.registry-path }}
+      tag: ${{ steps.build-push.outputs.tag }}
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build and push container image"
+        uses: ./.github/actions/build-push
+        id: build-push
+        with:
+          variant: "sway-atomic"
+          release: ${{ env.RELEASE }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  build-sway-atomic-aarch64:
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:rawhide
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --pid=host
+    outputs:
+      version: ${{ steps.build-push.outputs.version }}
+      digest: ${{ steps.build-push.outputs.digest }}
+      registry-path: ${{ steps.build-push.outputs.registry-path }}
+      tag: ${{ steps.build-push.outputs.tag }}
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build and push container image"
+        uses: ./.github/actions/build-push
+        id: build-push
+        with:
+          variant: "sway-atomic"
+          release: ${{ env.RELEASE }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  multi-arch-sway-atomic:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-sway-atomic-x86_64
+      - build-sway-atomic-aarch64
+    if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Create multi-arch manifest"
+        uses: ./.github/actions/multi-arch
+        with:
+          version: ${{ needs.build-sway-atomic-x86_64.outputs.version }}
+          release: ${{ env.RELEASE }}
+          registry-path: ${{ needs.build-sway-atomic-x86_64.outputs.registry-path }}
+          image-x86_64: ${{ needs.build-sway-atomic-x86_64.outputs.registry-path }}:${{ needs.build-sway-atomic-x86_64.outputs.tag }}
+          image-aarch64: ${{ needs.build-sway-atomic-aarch64.outputs.registry-path }}:${{ needs.build-sway-atomic-aarch64.outputs.tag }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  qcow2-sway-atomic-x86_64:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-sway-atomic-x86_64
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build QCOW2 image"
+        uses: ./.github/actions/qcow2
+        with:
+          registry: ${{ env.REGISTRY }}
+          image: ${{ needs.build-sway-atomic-x86_64.outputs.registry-path }}:${{ needs.build-sway-atomic-x86_64.outputs.tag }}
+          variant: "sway-atomic"
+          release: ${{ env.RELEASE }}
+          bib-config: "./bib-fedora.toml"
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  build-budgie-atomic-x86_64:
+    runs-on: ubuntu-24.04
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:rawhide
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --pid=host
+    outputs:
+      version: ${{ steps.build-push.outputs.version }}
+      digest: ${{ steps.build-push.outputs.digest }}
+      registry-path: ${{ steps.build-push.outputs.registry-path }}
+      tag: ${{ steps.build-push.outputs.tag }}
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build and push container image"
+        uses: ./.github/actions/build-push
+        id: build-push
+        with:
+          variant: "budgie-atomic"
+          release: ${{ env.RELEASE }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  build-budgie-atomic-aarch64:
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:rawhide
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --pid=host
+    outputs:
+      version: ${{ steps.build-push.outputs.version }}
+      digest: ${{ steps.build-push.outputs.digest }}
+      registry-path: ${{ steps.build-push.outputs.registry-path }}
+      tag: ${{ steps.build-push.outputs.tag }}
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build and push container image"
+        uses: ./.github/actions/build-push
+        id: build-push
+        with:
+          variant: "budgie-atomic"
+          release: ${{ env.RELEASE }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  multi-arch-budgie-atomic:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-budgie-atomic-x86_64
+      - build-budgie-atomic-aarch64
+    if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Create multi-arch manifest"
+        uses: ./.github/actions/multi-arch
+        with:
+          version: ${{ needs.build-budgie-atomic-x86_64.outputs.version }}
+          release: ${{ env.RELEASE }}
+          registry-path: ${{ needs.build-budgie-atomic-x86_64.outputs.registry-path }}
+          image-x86_64: ${{ needs.build-budgie-atomic-x86_64.outputs.registry-path }}:${{ needs.build-budgie-atomic-x86_64.outputs.tag }}
+          image-aarch64: ${{ needs.build-budgie-atomic-aarch64.outputs.registry-path }}:${{ needs.build-budgie-atomic-aarch64.outputs.tag }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  qcow2-budgie-atomic-x86_64:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-budgie-atomic-x86_64
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build QCOW2 image"
+        uses: ./.github/actions/qcow2
+        with:
+          registry: ${{ env.REGISTRY }}
+          image: ${{ needs.build-budgie-atomic-x86_64.outputs.registry-path }}:${{ needs.build-budgie-atomic-x86_64.outputs.tag }}
+          variant: "budgie-atomic"
+          release: ${{ env.RELEASE }}
+          bib-config: "./bib-fedora.toml"
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  build-cosmic-atomic-x86_64:
+    runs-on: ubuntu-24.04
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:rawhide
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --pid=host
+    outputs:
+      version: ${{ steps.build-push.outputs.version }}
+      digest: ${{ steps.build-push.outputs.digest }}
+      registry-path: ${{ steps.build-push.outputs.registry-path }}
+      tag: ${{ steps.build-push.outputs.tag }}
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build and push container image"
+        uses: ./.github/actions/build-push
+        id: build-push
+        with:
+          variant: "cosmic-atomic"
+          release: ${{ env.RELEASE }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  build-cosmic-atomic-aarch64:
+    runs-on: ubuntu-24.04-arm
+    container:
+      image: quay.io/fedora-ostree-desktops/buildroot:rawhide
+      options: --security-opt=label=disable --privileged --user 0:0 --device=/dev/kvm --device=/dev/fuse --volume /:/run/host:rw --pid=host
+    outputs:
+      version: ${{ steps.build-push.outputs.version }}
+      digest: ${{ steps.build-push.outputs.digest }}
+      registry-path: ${{ steps.build-push.outputs.registry-path }}
+      tag: ${{ steps.build-push.outputs.tag }}
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build and push container image"
+        uses: ./.github/actions/build-push
+        id: build-push
+        with:
+          variant: "cosmic-atomic"
+          release: ${{ env.RELEASE }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  multi-arch-cosmic-atomic:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-cosmic-atomic-x86_64
+      - build-cosmic-atomic-aarch64
+    if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Create multi-arch manifest"
+        uses: ./.github/actions/multi-arch
+        with:
+          version: ${{ needs.build-cosmic-atomic-x86_64.outputs.version }}
+          release: ${{ env.RELEASE }}
+          registry-path: ${{ needs.build-cosmic-atomic-x86_64.outputs.registry-path }}
+          image-x86_64: ${{ needs.build-cosmic-atomic-x86_64.outputs.registry-path }}:${{ needs.build-cosmic-atomic-x86_64.outputs.tag }}
+          image-aarch64: ${{ needs.build-cosmic-atomic-aarch64.outputs.registry-path }}:${{ needs.build-cosmic-atomic-aarch64.outputs.tag }}
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
+
+  qcow2-cosmic-atomic-x86_64:
+    runs-on: ubuntu-24.04
+    needs:
+      - build-cosmic-atomic-x86_64
+    steps:
+      - name: "Checkout repo"
+        uses: actions/checkout@v4
+      - name: "Runner setup"
+        uses: ./.github/actions/setup
+      - name: "Build QCOW2 image"
+        uses: ./.github/actions/qcow2
+        with:
+          registry: ${{ env.REGISTRY }}
+          image: ${{ needs.build-cosmic-atomic-x86_64.outputs.registry-path }}:${{ needs.build-cosmic-atomic-x86_64.outputs.tag }}
+          variant: "cosmic-atomic"
+          release: ${{ env.RELEASE }}
+          bib-config: "./bib-fedora.toml"
+          username: ${{ secrets.BOT_USERNAME }}
+          password: ${{ secrets.BOT_SECRET }}
+          cosign-private-key: ${{ secrets.COSIGN_PRIVATE_KEY}}
