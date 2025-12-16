@@ -177,9 +177,9 @@ desktop_exclude_list:
     - firefox
   budgie-desktop-apps:
     # Non-critical apps -> Flatpak
-    - atril
-    - eom
-    - gnome-calculator
+    - kcalc
+    - koko
+    - okular
     - parole
     - rhythmbox
     # Included explicitly in the fedora.yaml manifest
