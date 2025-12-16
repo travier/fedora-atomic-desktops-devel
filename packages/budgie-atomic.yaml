@@ -8,46 +8,42 @@ packages:
   - NetworkManager-ssh-gnome
   - NetworkManager-vpnc-gnome
   - NetworkManager-wwan
+  - ark
+  - bluejay
   - budgie-backgrounds
   - budgie-control-center
   - budgie-desktop
   - budgie-desktop-defaults
   - budgie-desktop-view
-  - budgie-screensaver
+  - budgie-display-configurator
   - dconf
+  - dolphin
   - fprintd-pam
-  - gedit
   - glib-networking
   - glx-utils
-  - gnome-bluetooth
   - gnome-color-manager
-  - gnome-disk-utility
   - gnome-keyring-pam
   - gnome-settings-daemon
-  - gnome-system-monitor
-  - gnome-terminal
-  - gvfs-afc
-  - gvfs-afp
-  - gvfs-archive
-  - gvfs-fuse
-  - gvfs-goa
-  - gvfs-gphoto2
-  - gvfs-mtp
-  - gvfs-smb
-  - lightdm
+  - gtklock
+  - initial-setup-gui-wayland-miriway
+  - kate
+  - kde-partitionmanager
+  - kio-admin
+  - kio-extras
+  - kio-fuse
+  - konsole
   - mesa-dri-drivers
   - mesa-vulkan-drivers
-  - nemo
-  - nemo-fileroller
-  - nemo-seahorse
   - network-manager-applet
   - plasma-discover
+  - plasma-systemmonitor
   - plymouth-system-theme
   - polkit
+  - sddm-wayland-miriway
   - seahorse
-  - slick-greeter
   - xdg-desktop-portal
   - xdg-desktop-portal-gtk
+  - xdg-desktop-portal-wlr
   - xdg-user-dirs-gtk
   - xorg-x11-drv-amdgpu
   - xorg-x11-drv-ati

@@ -65,6 +65,7 @@ packages:
   - plasma-nm-vpnc
   - plasma-pa
   - plasma-print-manager
+  - plasma-setup
   - plasma-systemmonitor
   - plasma-thunderbolt
   - plasma-vault

@@ -22,6 +22,7 @@ packages:
   - plasma-mobile
   - plasma-mobile-sounds
   - plasma-settings
+  - plasma-setup
   - plymouth-system-theme
   - qmlkonsole
   - qrca

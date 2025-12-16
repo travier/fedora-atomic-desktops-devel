@@ -15,3 +15,4 @@ packages:
   - mesa-dri-drivers
   - mesa-vulkan-drivers
   - plymouth-system-theme
+  - system-config-printer
