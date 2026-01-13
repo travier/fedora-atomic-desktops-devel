@@ -8,6 +8,7 @@ packages:
   - kalk
   - kasts
   - kclock
+  - kde-settings-plasmalogin
   - keysmith
   - koko
   - krecorder
@@ -19,6 +20,7 @@ packages:
   - okular-mobile
   - plasma-discover
   - plasma-discover-notifier
+  - plasma-login-manager
   - plasma-mobile
   - plasma-mobile-sounds
   - plasma-settings
@@ -26,8 +28,5 @@ packages:
   - plymouth-system-theme
   - qmlkonsole
   - qrca
-  - sddm
-  - sddm-themes
-  - sddm-wayland-plasma
   - spacebar
   - tokodon

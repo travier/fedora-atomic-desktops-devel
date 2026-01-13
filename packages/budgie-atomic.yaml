@@ -15,7 +15,6 @@ packages:
   - budgie-desktop
   - budgie-desktop-defaults
   - budgie-desktop-view
-  - budgie-display-configurator
   - dconf
   - dolphin
   - fprintd-pam
@@ -41,6 +40,7 @@ packages:
   - polkit
   - sddm-wayland-miriway
   - seahorse
+  - wdisplays
   - xdg-desktop-portal
   - xdg-desktop-portal-gtk
   - xdg-desktop-portal-wlr

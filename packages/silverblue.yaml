@@ -32,6 +32,7 @@ packages:
   - gnome-system-monitor
   - gnome-user-docs
   - gnome-user-share
+  - gst-thumbnailers
   - gvfs-afc
   - gvfs-afp
   - gvfs-archive
@@ -53,7 +54,6 @@ packages:
   - rygel
   - systemd-oomd-defaults
   - tinysparql
-  - totem-video-thumbnailer
   - vte-profile
   - xdg-desktop-portal
   - xdg-desktop-portal-gnome

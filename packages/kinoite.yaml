@@ -18,10 +18,12 @@ packages:
   - kaccounts-integration-qt6
   - kaccounts-providers
   - kcharselect
+  - kcm-plasmalogin
   - kde-connect
   - kde-gtk-config
   - kde-inotify-survey
   - kde-partitionmanager
+  - kde-settings-plasmalogin
   - kde-settings-pulseaudio
   - kdebugsettings
   - kdegraphics-thumbnailers
@@ -59,6 +61,7 @@ packages:
   - plasma-discover-notifier
   - plasma-disks
   - plasma-drkonqi
+  - plasma-login-manager
   - plasma-nm
   - plasma-nm-openconnect
   - plasma-nm-openvpn
@@ -75,10 +78,6 @@ packages:
   - plymouth-system-theme
   - polkit-kde
   - samba-usershares
-  - sddm
-  - sddm-breeze
-  - sddm-kcm
-  - sddm-wayland-plasma
   - signon-kwallet-extension
   - spectacle
   - systemd-oomd-defaults
