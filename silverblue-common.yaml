@@ -13,6 +13,10 @@ packages:
   # Included for now to have layered Qt5 applications use a constistent style
   # Manually included here as it is excluded from the workstation-product group
   - qadwaitadecorations-qt5
+  - qt5-qtbase
+  - qt5-qtbase-gui
+  - qt5-qtdeclarative
+  - qt5-qtxmlpatterns
   # Include papers-thumbnailer otherwise PDF thumbnails won't work in Nautilus
   # https://github.com/fedora-silverblue/issue-tracker/issues/98
   # https://pagure.io/fedora-workstation/issue/434

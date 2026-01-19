@@ -96,6 +96,10 @@ exclude_list:
     - pinentry-gnome3
     # Excluded here for all desktops and manually re-added in Silverblue manifest
     - qadwaitadecorations-qt5
+    - qt5-qtbase
+    - qt5-qtbase-gui
+    - qt5-qtdeclarative
+    - qt5-qtxmlpatterns
     # X11 specific
     - xorg-x11-drv-libinput
     # Included explicitly in the fedora.yaml manifest
