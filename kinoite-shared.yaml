@@ -16,6 +16,8 @@ packages:
   - gdb
   # Make sure rpm-ostree support is installed
   - plasma-discover-rpm-ostree
+  # Temporarily explicitly included to take precedence over maliit
+  - plasma-keyboard
 
 # Make sure the following are not pulled in when Recommended by other packages
 exclude-packages:
