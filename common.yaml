@@ -12,7 +12,7 @@ variables:
   # Default to including Fedora branding and specific packages
   distro: "fedora"
   # Used in ref. Equal to releasever, unless it's for Rawhide
-  releasever_ref: "rawhide"
+  releasever_ref: "44"
 
 # Default ref, overriden for some variants with legacy names
 ref: ${distro}/${releasever_ref}/${basearch}/${variant}
