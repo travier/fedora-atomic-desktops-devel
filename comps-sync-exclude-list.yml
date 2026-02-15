@@ -111,6 +111,11 @@ exclude_list:
     - plocate
     # Included explicitly in the fedora.yaml manifest
     - toolbox
+    # Only needed for CSD support with GNOME on Silverblue
+    - qt6-qtbase
+    - qt6-qtbase-gui
+    - qt6-qtdeclarative
+    - qt6-qtwayland-adwaita-decoration
   firefox:
     # Included explicitly in the fedora.yaml manifest
     - fedora-bookmarks

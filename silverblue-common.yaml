@@ -37,6 +37,11 @@ packages:
   # Needed for GSConnect extension
   # See: https://github.com/fedora-silverblue/issue-tracker/issues/201
   - openssl
+  # Manually included for CSD support with GNOME on Silverblue
+  - qt6-qtbase
+  - qt6-qtbase-gui
+  - qt6-qtdeclarative
+  - qt6-qtwayland-adwaita-decoration
 
 postprocess:
   # Skip Third Party Software page in GNOME Initial Setup as it currently does
