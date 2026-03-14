@@ -22,3 +22,7 @@ exclude-packages:
   - PackageKit-glib
   # Make sure GNOME Software does not get pulled as we use Plasma Discover
   - gnome-software
+  # Exclude Plasma Discover subpackages that we don't need
+  - plasma-discover-offline-updates
+  - plasma-discover-packagekit
+  - plasma-pk-updates
