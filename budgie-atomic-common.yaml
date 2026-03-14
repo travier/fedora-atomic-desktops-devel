@@ -11,6 +11,10 @@ include:
   - common.yaml
   - packages/budgie-atomic.yaml
 
+packages:
+  # Make sure rpm-ostree support is installed
+  - plasma-discover-rpm-ostree
+
 # Make sure the following are not pulled in when Recommended by other packages
 exclude-packages:
   # Not needed in Budgie Desktop
