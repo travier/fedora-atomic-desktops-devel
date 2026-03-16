@@ -241,3 +241,33 @@ postprocess:
     EOF
 
     systemctl preset fedora-atomic-desktop-appstream-cache-refresh.service
+
+    # Workaround broken mandb cache update
+    # See: https://gitlab.com/fedora/ostree/sig/-/work_items/62
+    cat > /usr/lib/systemd/system/fedora-atomic-desktop-mandb-update.service << 'EOF'
+    [Unit]
+    Description=Workaround for Atomic Destkops to update mandb cache
+    Documentation=https://gitlab.com/fedora/ostree/sig/-/work_items/62
+    ConditionPathIsReadWrite=/var
+    ConditionPathExists=/run/ostree-booted
+    After=local-fs.target
+
+    [Service]
+    Type=oneshot
+    RemainAfterExit=yes
+    Environment=MAN_NO_LOCALE_WARNING=1
+    ExecStart=mandb -q
+    Nice=19
+    IOWeight=10
+
+    [Install]
+    WantedBy=multi-user.target
+    EOF
+
+    cat >> /usr/lib/systemd/system-preset/81-atomic-desktop.preset << 'EOF'
+
+    # See: https://gitlab.com/fedora/ostree/sig/-/work_items/62
+    enable fedora-atomic-desktop-mandb-update.service
+    EOF
+
+    systemctl preset fedora-atomic-desktop-mandb-update.service
